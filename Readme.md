@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
 * Студент: [Александр Корнилов](https://up.htmlacademy.ru/univer-nodejs-api/3/user/2219899).
-* Наставник: `Неизвестно`.
+* Наставник: [Владислав Поляков](https://htmlacademy.ru/profile/polrk).
 
 ---
 

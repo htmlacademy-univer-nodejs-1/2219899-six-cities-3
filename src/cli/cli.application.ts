@@ -4,19 +4,19 @@ import chalk from 'chalk';
 type OptionalCommand = Command | undefined;
 
 export class CLIApplication {
-  private readonly commandsMapping: Record<string, Command>;
+  private readonly commandsMapping: Map<string, Command>;
   private readonly defaultCommand: Command;
 
   public constructor(defaultCommand: Command) {
-    this.commandsMapping = {};
+    this.commandsMapping = new Map<string, Command>();
     this.defaultCommand = defaultCommand;
   }
 
   public includeCommand(command: Command): void {
-    if (Object.hasOwn(this.commandsMapping, command.getName())) {
+    if (this.commandsMapping.has(command.getName())) {
       return;
     }
-    this.commandsMapping[command.getName()] = command;
+    this.commandsMapping.set(command.getName(), command);
   }
 
   public includeCommands(...commands: Command[]): void {
@@ -27,7 +27,7 @@ export class CLIApplication {
 
   public processCommand(argv: string[]): void {
     const [commandName, ...params] = argv.slice(2);
-    const command: OptionalCommand = this.commandsMapping[commandName];
+    const command: OptionalCommand = this.commandsMapping.get(commandName);
     if (command === undefined) {
       this.processUndefinedCommandMessage();
       return;

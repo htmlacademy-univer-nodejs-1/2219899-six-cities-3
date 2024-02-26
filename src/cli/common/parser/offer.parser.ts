@@ -4,33 +4,17 @@ import {AccommodationType} from '../types/accommodation.enum';
 import {ConveniencesEnum} from '../types/conveniences.enum';
 
 export class RentOfferParser implements ParserInterface<RentOffer> {
-  parse(rawData: string): RentOffer[] {
-    return rawData
-      .split('\n')
-      .slice(1)
-      .filter((row) => row.trim().length > 1)
-      .map((row: string) => row.split('\t'))
-      .map(([
-        name,
-        description,
-        publishedAt,
-        city,
-        preview,
-        photos,
-        isPremium,
-        isFavourite,
-        rating,
-        accommodationType,
-        roomCount,
-        guestCount,
-        cost,
-        conveniences,
-        userName,
-        userEmail,
-        userAvatar,
-        commentsCount,
-        latitude,
-        longitude]) => ({
+  public* parse(rawData: string): Generator<RentOffer> {
+    for (const row of rawData.split('\n').slice(1)) {
+      if (row.trim().length <= 1) {
+        continue;
+      }
+      const [
+        name, description, publishedAt, city, preview, photos, isPremium, isFavourite, rating,
+        accommodationType, roomCount, guestCount, cost, conveniences, userName, userEmail,
+        userAvatar, commentsCount, latitude, longitude
+      ]: string[] = row.split('\t');
+      yield {
         name,
         description,
         publishedAt: new Date(publishedAt),
@@ -49,7 +33,8 @@ export class RentOfferParser implements ParserInterface<RentOffer> {
         commentsCount: Number(commentsCount),
         latitude: Number(latitude),
         longitude: Number(longitude)
-      }));
+      };
+    }
   }
 }
 

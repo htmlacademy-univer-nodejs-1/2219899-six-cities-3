@@ -4,7 +4,7 @@ import chalk from 'chalk';
 type OptionalCommand = Command | undefined;
 
 export class CLIApplication {
-  private readonly unkmownCommandMessage: string = 'Entered unknown command';
+  private readonly unknownCommandMessage: string = 'Entered unknown command';
   private readonly commandsMapping: Map<string, Command>;
   private readonly defaultCommand: Command;
 
@@ -37,7 +37,7 @@ export class CLIApplication {
   }
 
   private processDefaultCommand(): void {
-    console.log(chalk.red(this.unkmownCommandMessage));
+    console.log(chalk.red(this.unknownCommandMessage));
     this.defaultCommand.process();
   }
 }

@@ -1,11 +1,12 @@
 import {Command} from './command.interface';
 import {RentOfferParser} from '../common/parser/offer.parser';
-import {readFileSync} from 'node:fs';
 import chalk from 'chalk';
+import {TsvReader} from '../common/reader/tsv.reader';
+import {RentOffer} from '../common/types/offer.type';
 
 class CommandImport implements Command {
-  private readonly importMessage: string = 'Imported data:';
   private readonly importErrorMessage: string = 'Error while importing file data.\nMessage error: ';
+  private readonly rowCountMessage: string = 'Read lines count from the file: ';
 
   private readonly importArgumentErrorMessage: string =
     `Command "--import" accepts argument of filename.
@@ -18,20 +19,34 @@ Example: ./src/main.cli.ts --import mocks/offer_rent.tsv`;
     return this.name;
   }
 
-  process(..._params: string[]): void {
+  async process(..._params: string[]): Promise<void> {
     const [fileName] = _params;
     if (fileName === undefined) {
       console.error(chalk.red(this.importArgumentErrorMessage));
       return;
     }
+
+    const tsvReader = new TsvReader();
+    tsvReader.on('line', (line: string) => this.onLineEvent(line));
+    tsvReader.on('end', (rowCount: number) => this.onEndEvent(rowCount));
+
     try {
-      console.info(chalk.green(this.importMessage));
-      for (const rent of this.parser.parse(readFileSync(fileName, 'utf-8'))) {
-        console.info(rent);
-      }
+      await tsvReader.readStream(fileName);
     } catch (e: unknown) {
-      console.error(chalk.red.bold(this.importErrorMessage + e));
+      console.error(chalk.red.bold(this.importErrorMessage));
     }
+  }
+
+  private onLineEvent(line: string): void {
+    const rent: RentOffer = this.parser.parse(line);
+    if (rent === undefined) {
+      return;
+    }
+    console.info(rent);
+  }
+
+  private onEndEvent(rowCount: number): void {
+    console.log(chalk.greenBright(this.rowCountMessage + rowCount));
   }
 }
 

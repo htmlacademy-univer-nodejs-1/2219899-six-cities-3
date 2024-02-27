@@ -1,3 +1,3 @@
 export interface ParserInterface<Type> {
-  parse(rawData: string): Generator<Type>;
+  parse(rawData: string): Type;
 }

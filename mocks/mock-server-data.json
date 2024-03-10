@@ -1,0 +1,109 @@
+{
+  "api": {
+    "names": [
+      "Дом за городом",
+      "Квартира с видом на море",
+      "Квартира в центре",
+      "Загородный дом",
+      "Апартаменты на окраине",
+      "Изба на курьих-ножках"
+    ],
+    "descriptions": [
+      "Уютный отель рядом с пляжем",
+      "Современный хостел в центре города",
+      "Романтичный отель с видом на океан",
+      "Дружелюбный гестхаус на берегу реки",
+      "Эксклюзивный отель в историческом здании",
+      "Семейный отель с бассейном и садом",
+      "Стильный хостел для молодежи",
+      "Уединенный коттедж на окраине города"
+    ],
+    "cities": [
+      "Paris",
+      "Cologne",
+      "Brussels",
+      "Amsterdam",
+      "Hamburg",
+      "Dusseldorf"
+    ],
+    "previews": [
+      "city-house.jpg",
+      "big-apartment.jpg",
+      "flat.jpg",
+      "small-apartment.jpg",
+      "cottage.jpg",
+      "country-house.jpg"
+    ],
+    "photos": [
+      "city-house.jpg",
+      "big-apartment.jpg",
+      "flat.jpg",
+      "small-apartment.jpg",
+      "cottage.jpg",
+      "country-house.jpg"
+    ],
+    "premium": [
+      true,
+      false
+    ],
+    "favourite": [
+      true,
+      false
+    ],
+    "types": [
+      "apartment",
+      "house",
+      "room",
+      "hotel"
+    ],
+    "rating": {
+      "min": 1,
+      "max": 5
+    },
+    "room_count": {
+      "min": 1,
+      "max": 8
+    },
+    "guest_count": {
+      "min": 1,
+      "max": 10
+    },
+    "conveniences": [
+      "Breakfast",
+      "Air conditioning",
+      "Laptop friendly workspace",
+      "Baby Seat",
+      "Washer",
+      "Towels",
+      "Fridge"
+    ],
+    "cost": {
+      "min": 100,
+      "max": 100000
+    },
+    "users": [
+      "Иван Иванов",
+      "Олег Сидоров",
+      "Пьер Безухов",
+      "Роланд Дискейн",
+      "Холи Гибни",
+      "Джек Торренс",
+      "Антон Городецкий",
+      "Борис Гесер",
+      "Рокки Бальбоа",
+      "Джон Смит"
+    ],
+    "commentsCount": {
+      "min": 0,
+      "max": 10
+    },
+    "coordinates": [
+      "48.85661;2.351499",
+      "50.938361;6.959974",
+      "50.846557;4.351697",
+      "52.370216;4.895168",
+      "53.550341;10.000654",
+      "51.225402;6.776314"
+    ]
+  }
+}

@@ -14,6 +14,6 @@ async function main() {
 
   const application = container.get<RestApplication>(Component.RestApplication);
   await application.init();
-};
+}
 
 await main();

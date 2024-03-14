@@ -1,8 +1,8 @@
 import {Command} from './command.interface';
-import {RentOfferParser} from '../common/parser/offer.parser';
 import chalk from 'chalk';
-import {TsvReader} from '../common/reader/tsv.reader';
-import {RentOffer} from '../common/types/offer.type';
+import {RentOfferParser} from '../../common/parser';
+import {TsvReader} from '../../common/reader';
+import {RentOffer} from '../../common/types';
 
 class CommandImport implements Command {
   private readonly importErrorMessage: string = 'Error while importing file data.\nMessage error: ';

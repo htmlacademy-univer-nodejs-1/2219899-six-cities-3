@@ -1,11 +1,7 @@
 #!/usr/bin/env tsx
 
 import {CLIApplication} from './cli/cli.application';
-import {CommandHelp} from './cli/commands/command.help';
-import {CommandVersion} from './cli/commands/command.version';
-import {Command} from './cli/commands/command.interface';
-import {CommandImport} from './cli/commands/command.import';
-import {CommandGenerate} from './cli/commands/command.generate';
+import {Command, CommandGenerate, CommandHelp, CommandImport, CommandVersion} from './cli/commands';
 
 function main(): void {
   const defaultCommand: Command = new CommandHelp();

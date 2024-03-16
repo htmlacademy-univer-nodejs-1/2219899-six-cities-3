@@ -1,4 +1,4 @@
-import {Command} from './commands/command.interface';
+import {Command} from './commands';
 import chalk from 'chalk';
 
 type OptionalCommand = Command | undefined;

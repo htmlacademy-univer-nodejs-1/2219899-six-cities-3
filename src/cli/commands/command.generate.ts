@@ -1,9 +1,10 @@
 import {Command} from './command.interface';
 import axios from 'axios';
-import {OfferGenerator} from '../common/generator/offer.generator';
-import {ServerMockData} from '../common/types/server_mock_data.type';
-import {TsvWriter} from '../common/writer/tsv.writer';
+
 import chalk from 'chalk';
+import {ServerMockData} from '../../common/types';
+import {OfferGenerator} from '../../common/generator';
+import {TsvWriter} from '../../common/writer/tsv.writer';
 
 export class CommandGenerate implements Command {
   private readonly SERVER_ERROR_MESSAGE: string = 'Error while sending request to a json server';

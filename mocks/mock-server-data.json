@@ -1,6 +1,6 @@
 {
   "api": {
-    "names": [
+    "titles": [
       "Дом за городом",
       "Квартира с видом на море",
       "Квартира в центре",
@@ -26,7 +26,7 @@
       "Hamburg",
       "Dusseldorf"
     ],
-    "previews": [
+    "previewImages": [
       "city-house.jpg",
       "big-apartment.jpg",
       "flat.jpg",
@@ -34,7 +34,7 @@
       "cottage.jpg",
       "country-house.jpg"
     ],
-    "photos": [
+    "images": [
       "city-house.jpg",
       "big-apartment.jpg",
       "flat.jpg",
@@ -50,25 +50,29 @@
       true,
       false
     ],
+    "rating": {
+      "min": 1,
+      "max": 5
+    },
     "types": [
       "apartment",
       "house",
       "room",
       "hotel"
     ],
-    "rating": {
-      "min": 1,
-      "max": 5
-    },
-    "room_count": {
+    "bedrooms": {
       "min": 1,
       "max": 8
     },
-    "guest_count": {
+    "adults": {
       "min": 1,
       "max": 10
     },
-    "conveniences": [
+    "price": {
+      "min": 100,
+      "max": 100000
+    },
+    "goods": [
       "Breakfast",
       "Air conditioning",
       "Laptop friendly workspace",
@@ -77,11 +81,7 @@
       "Towels",
       "Fridge"
     ],
-    "cost": {
-      "min": 100,
-      "max": 100000
-    },
-    "users": [
+    "userNames": [
       "Иван Иванов",
       "Олег Сидоров",
       "Пьер Безухов",
@@ -92,6 +92,21 @@
       "Борис Гесер",
       "Рокки Бальбоа",
       "Джон Смит"
+    ],
+    "userEmails": [
+      "email1@mail.ru",
+      "email2@ya.ru",
+      "email3@mail.ru",
+      "email4@gmail.com",
+      "email5@mail.ru"
+    ],
+    "userAvatars": [
+      "city-house.jpg",
+      "big-apartment.jpg",
+      "flat.jpg",
+      "small-apartment.jpg",
+      "cottage.jpg",
+      "country-house.jpg"
     ],
     "commentsCount": {
       "min": 0,

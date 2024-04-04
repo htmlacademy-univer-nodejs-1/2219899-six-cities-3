@@ -1,34 +1,58 @@
 import {Command} from './command.interface';
 import chalk from 'chalk';
-import {RentOfferParser} from '../../common/parser';
 import {TsvReader} from '../../common/reader';
 import {RentOffer} from '../../common/types';
+import {DefaultUserService, UserEntity, UserModel, UserService} from '../../common/modules/user';
+import {OfferService} from '../../common/modules/offer/offer-service.interface';
+import {DatabaseClient, MongoClient} from '../../common/database_client';
+import {Logger} from '../../common/logger';
+import {ConsoleLogger} from '../../common/logger/console.logger';
+import {DefaultOfferService} from '../../common/modules/offer/offer.service';
+import {OfferModel} from '../../common/modules/offer/offer.entity';
+import {parseOffer} from '../../common/utils/offer.util';
 
 class CommandImport implements Command {
   private readonly importErrorMessage: string = 'Error while importing file data.\nMessage error: ';
-  private readonly rowCountMessage: string = 'Read lines count from the file: ';
 
   private readonly importArgumentErrorMessage: string =
     `Command "--import" accepts argument of filename.
 Example: ./src/main.cli.ts --import mocks/offer_rent.tsv`;
 
   private readonly name: string = '--import';
-  private readonly parser: RentOfferParser = new RentOfferParser();
+
+  private readonly userService: UserService;
+  private readonly offerService: OfferService;
+  private readonly dbClient: DatabaseClient;
+  private readonly logger: Logger;
+  private salt!: string;
+
+  constructor() {
+    this.logger = new ConsoleLogger();
+    this.offerService = new DefaultOfferService(this.logger, OfferModel);
+    this.userService = new DefaultUserService(this.logger, UserModel);
+    this.dbClient = new MongoClient(this.logger);
+
+    this.onImportComplete = this.onImportComplete.bind(this);
+    this.onImportedLine = this.onImportedLine.bind(this);
+  }
 
   getName(): string {
     return this.name;
   }
 
   async process(..._params: string[]): Promise<void> {
-    const [fileName] = _params;
+    const [fileName, mongoURI, salt] = _params;
+    this.salt = salt;
+    await this.dbClient.connect(mongoURI);
+
     if (fileName === undefined) {
       console.error(chalk.red(this.importArgumentErrorMessage));
       return;
     }
 
     const tsvReader = new TsvReader();
-    tsvReader.on('line', (line: string) => this.onLineEvent(line));
-    tsvReader.on('end', (rowCount: number) => this.onEndEvent(rowCount));
+    tsvReader.on('line', this.onImportedLine);
+    tsvReader.on('end', this.onImportComplete);
 
     try {
       await tsvReader.readStream(fileName);
@@ -37,16 +61,40 @@ Example: ./src/main.cli.ts --import mocks/offer_rent.tsv`;
     }
   }
 
-  private onLineEvent(line: string): void {
-    const rent: RentOffer = this.parser.parse(line);
-    if (rent === undefined) {
-      return;
-    }
-    console.info(rent);
+  private async onImportedLine(line: string, resolve: () => void): Promise<void> {
+    const rent: RentOffer = parseOffer(line);
+    await this.saveOffer(rent);
+    resolve();
   }
 
-  private onEndEvent(rowCount: number): void {
-    console.log(chalk.greenBright(this.rowCountMessage + rowCount));
+  private async onImportComplete(rowCount: number): Promise<void> {
+    console.log(`Successfully imported ${rowCount} rows to database`);
+    await this.dbClient.disconnect();
+  }
+
+  private async saveOffer(offer: RentOffer): Promise<void> {
+    const user: UserEntity = await this.userService.findOrCreate({
+      ...offer.user,
+      password: 'any'
+    }, this.salt);
+    await this.offerService.create({
+      title: offer.title,
+      description: offer.description,
+      publishedAt: offer.publishedAt.toISOString(),
+      city: offer.city,
+      previewImage: offer.previewImage,
+      images: offer.images,
+      isPremium: offer.isPremium,
+      isFavourite: offer.isFavourite,
+      rating: offer.rating,
+      type: offer.type,
+      bedrooms: offer.bedrooms,
+      maxAdults: offer.maxAdults,
+      price: offer.price,
+      goods: offer.goods,
+      location: offer.location,
+      userId: user.id,
+    });
   }
 }
 

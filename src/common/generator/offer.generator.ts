@@ -1,6 +1,6 @@
 import {TypeGenerator} from './generator.interface';
-import {ServerMockData} from '../types/server_mock_data.type';
-import {Random} from '../utils/random.util';
+import {ServerMockData} from '../types';
+import {Random} from '../utils';
 import dayjs from 'dayjs';
 
 export class OfferGenerator implements TypeGenerator {
@@ -15,21 +15,23 @@ export class OfferGenerator implements TypeGenerator {
 
   generate(): string {
     return [
-      Random.getRandomArrayItem<string>(this.data.names),
+      Random.getRandomArrayItem<string>(this.data.titles),
       Random.getRandomArrayItem<string>(this.data.descriptions),
       this.randomISODate(),
       Random.getRandomArrayItem<string>(this.data.cities),
-      Random.getRandomArrayItem<string>(this.data.previews),
-      Random.getRandomItems<string>(this.data.photos),
+      Random.getRandomArrayItem<string>(this.data.previewImages),
+      Random.getRandomItems<string>(this.data.images),
       Random.getRandomArrayItem<boolean>(this.data.premium),
       Random.getRandomArrayItem<boolean>(this.data.favourite),
-      Random.getRandomArrayItem<string>(this.data.types),
       Random.getRandomFloat(this.data.rating),
-      Random.getRandomInteger(this.data.room_count),
-      Random.getRandomInteger(this.data.guest_count),
-      Random.getRandomItems<string>(this.data.conveniences),
-      Random.getRandomInteger(this.data.cost),
-      Random.getRandomArrayItem<string>(this.data.users),
+      Random.getRandomArrayItem<string>(this.data.types),
+      Random.getRandomInteger(this.data.bedrooms),
+      Random.getRandomInteger(this.data.adults),
+      Random.getRandomInteger(this.data.price),
+      Random.getRandomItems<string>(this.data.goods),
+      Random.getRandomArrayItem<string>(this.data.userNames),
+      Random.getRandomArrayItem<string>(this.data.userEmails),
+      Random.getRandomArrayItem<string>(this.data.userAvatars),
       Random.getRandomInteger(this.data.commentsCount),
       Random.getRandomArrayItem(this.data.coordinates)
     ].join('\t');

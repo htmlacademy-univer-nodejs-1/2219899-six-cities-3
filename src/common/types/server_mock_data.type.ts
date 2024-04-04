@@ -1,20 +1,22 @@
 import {Limit} from './limit.type';
 
 export type ServerMockData = {
-  names: string[];
+  titles: string[];
   descriptions: string[];
   cities: string[];
-  previews: string[];
-  photos: string[];
+  previewImages: string[];
+  images: string[];
   premium: boolean[];
   favourite: boolean[];
-  types: string[];
   rating: Limit;
-  room_count: Limit;
-  guest_count: Limit;
-  conveniences: string[];
-  cost: Limit;
-  users: string[];
+  types: string[];
+  bedrooms: Limit;
+  adults: Limit;
+  price: Limit;
+  goods: string[];
+  userNames: string[];
+  userEmails: string[];
+  userAvatars: string[];
   commentsCount: Limit;
   coordinates: string[];
 };

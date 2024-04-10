@@ -12,7 +12,7 @@ class CommandVersion implements Command {
     return this.name;
   }
 
-  process(..._params: string[]): void {
+  async process(..._params: string[]): Promise<void> {
     try {
       const version: string = this.getProjectVersion();
       console.info(chalk.greenBright(this.versionMessage + version));

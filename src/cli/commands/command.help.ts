@@ -20,7 +20,7 @@ export class CommandHelp implements Command {
     return this.name;
   }
 
-  process(..._params: string[]): void {
+  async process(..._params: string[]): Promise<void> {
     console.info(chalk.greenBright(this.helpMessage));
   }
 }

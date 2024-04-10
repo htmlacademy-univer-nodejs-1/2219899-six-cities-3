@@ -1,4 +1,4 @@
-import {Limit} from '../types/limit.type';
+import {Limit} from '../types';
 
 export class Random {
   public static getRandomInteger({min, max}: Limit): number {
@@ -14,10 +14,11 @@ export class Random {
   }
 
   public static getRandomItems<T>(array: T[]): T[] {
-    const result: T[] = [];
-    for (let i = 0; i < this.getRandomInteger({min: 0, max: array.length - 1}); i++) {
-      result.push(this.getRandomArrayItem(array));
-    }
-    return result;
+    const startPosition = this.getRandomInteger({min: 0, max: array.length - 1});
+    const endPosition = startPosition + this.getRandomInteger({
+      min: startPosition,
+      max: array.length
+    });
+    return array.slice(startPosition, endPosition);
   }
 }

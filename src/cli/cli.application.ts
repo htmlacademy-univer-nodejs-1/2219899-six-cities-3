@@ -26,18 +26,18 @@ export class CLIApplication {
     });
   }
 
-  public async processCommand(argv: string[]): Promise<void> {
+  public processCommand(argv: string[]): void {
     const [commandName, ...params] = argv.slice(2);
     const command: OptionalCommand = this.commandsMapping.get(commandName);
     if (command === undefined) {
-      await this.processDefaultCommand();
+      this.processDefaultCommand();
       return;
     }
-    await command.process(...params);
+    command.process(...params);
   }
 
-  private async processDefaultCommand(): Promise<void> {
+  private processDefaultCommand(): void {
     console.log(chalk.red(this.unknownCommandMessage));
-    await this.defaultCommand.process();
+    this.defaultCommand.process();
   }
 }

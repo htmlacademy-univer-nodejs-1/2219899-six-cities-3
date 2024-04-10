@@ -1,6 +1,6 @@
 import {Reader} from './reader.interface';
 import {createReadStream, ReadStream} from 'node:fs';
-import {resolve} from 'node:path';
+import {resolve as PathResolve} from 'node:path';
 import EventEmitter from 'node:events';
 
 export class TsvReader extends EventEmitter implements Reader {
@@ -8,7 +8,7 @@ export class TsvReader extends EventEmitter implements Reader {
 
   public async readStream(fileName: string): Promise<void> {
     const streamRead: ReadStream = createReadStream(
-      resolve(fileName),
+      PathResolve(fileName),
       {
         encoding: 'utf-8',
         highWaterMark: this.CHUNK_SIZE
@@ -25,7 +25,11 @@ export class TsvReader extends EventEmitter implements Reader {
         const completeRow = remainingData.slice(0, nextLinePosition + 1);
         remainingData = remainingData.slice(++nextLinePosition);
         rowCount++;
-        this.emit('line', completeRow);
+
+        await new Promise((resolve) => {
+          this.emit('line', completeRow, resolve);
+        });
+        // this.emit('line', completeRow);
       }
     }
     this.emit('end', rowCount);

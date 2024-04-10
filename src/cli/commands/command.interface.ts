@@ -10,7 +10,7 @@ interface Command {
   /**
    * Processing the command
    */
-  process(..._params: string[]): Promise<void>;
+  process(..._params: string[]): void;
 }
 
 export {Command};

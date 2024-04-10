@@ -3,7 +3,7 @@
 import {CLIApplication} from './cli/cli.application';
 import {Command, CommandGenerate, CommandHelp, CommandImport, CommandVersion} from './cli/commands';
 
-async function main(): Promise<void> {
+function main(): void {
   const defaultCommand: Command = new CommandHelp();
   const app = new CLIApplication(defaultCommand);
   const commands: Command[] = [
@@ -13,7 +13,7 @@ async function main(): Promise<void> {
     new CommandGenerate()
   ];
   app.includeCommands(...commands);
-  await app.processCommand(process.argv);
+  app.processCommand(process.argv);
 }
 
-await main();
+main();

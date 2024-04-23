@@ -1,2 +1,2 @@
-export * from './create-offer.dto';
-export * from './update-offer.dto';
+export * from './create-offer.dto.js';
+export * from './update-offer.dto.js';

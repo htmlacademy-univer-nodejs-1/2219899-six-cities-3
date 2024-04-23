@@ -2,7 +2,7 @@ import {Limit} from '../types';
 
 export class Random {
   public static getRandomInteger({min, max}: Limit): number {
-    return Math.round(this.getRandomFloat({min, max}));
+    return Math.ceil(this.getRandomFloat({min, max}));
   }
 
   public static getRandomFloat({min, max}: Limit): number {

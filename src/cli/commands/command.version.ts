@@ -1,4 +1,4 @@
-import {Command} from './command.interface';
+import {Command} from './command.interface.js';
 import chalk from 'chalk';
 import * as packageJson from '../../../package.json';
 

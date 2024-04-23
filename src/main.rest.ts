@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import {RestApplication} from './rest';
 import {Component} from './common/types';
-import {createRestApplicationContainer} from './rest/rest.container';
+import {createRestApplicationContainer} from './rest/rest.container.js';
 import {Container} from 'inversify';
 import {createUserContainer} from './common/modules/user';
 

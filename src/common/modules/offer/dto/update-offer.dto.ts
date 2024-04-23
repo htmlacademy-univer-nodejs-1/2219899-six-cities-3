@@ -1,5 +1,5 @@
 import {AccommodationType} from '../../../types';
-import {Location} from '../../../types/location.type';
+import {Location} from '../../../types/location.type.js';
 
 export class UpdateOfferDTO {
   public title?: string;

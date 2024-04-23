@@ -7,7 +7,7 @@ export interface OfferService {
 
   findById(id: string): Promise<DocumentType<OfferEntity> | null>;
 
-  find(limit: number): Promise<DocumentType<OfferEntity>[]>;
+  find(limit?: number): Promise<DocumentType<OfferEntity>[]>;
 
   updateById(offerId: string, updatedSchema: UpdateOfferDTO): Promise<DocumentType<OfferEntity> | null>;
 
@@ -17,7 +17,7 @@ export interface OfferService {
 
   findPremiumOffers(city: string): Promise<DocumentType<OfferEntity>[]>;
 
-  findFavouriteOffer(city: string): Promise<DocumentType<OfferEntity>[]>;
+  findFavouriteOffer(): Promise<DocumentType<OfferEntity>[]>;
 
   deleteFavourite(offerId: string): Promise<DocumentType<OfferEntity> | null>;
 

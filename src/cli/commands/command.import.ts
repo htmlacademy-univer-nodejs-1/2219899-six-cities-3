@@ -1,15 +1,15 @@
-import {Command} from './command.interface';
+import {Command} from './command.interface.js';
 import chalk from 'chalk';
-import {TsvReader} from '../../common/reader';
 import {RentOffer} from '../../common/types';
 import {DefaultUserService, UserEntity, UserModel, UserService} from '../../common/modules/user';
-import {OfferService} from '../../common/modules/offer/offer-service.interface';
-import {DatabaseClient, MongoClient} from '../../common/database_client';
-import {Logger} from '../../common/logger';
-import {ConsoleLogger} from '../../common/logger/console.logger';
-import {DefaultOfferService} from '../../common/modules/offer/offer.service';
-import {OfferModel} from '../../common/modules/offer/offer.entity';
-import {parseOffer} from '../../common/utils/offer.util';
+import {OfferService} from '../../common/modules/offer/offer-service.interface.js';
+import {DefaultOfferService} from '../../common/modules/offer/offer.service.js';
+import {OfferModel} from '../../common/modules/offer/offer.entity.js';
+import {parseOffer} from '../../common/utils';
+import {DatabaseClient, MongoClient} from '../../common/libs/database_client';
+import {Logger} from '../../common/libs/logger';
+import {ConsoleLogger} from '../../common/libs/logger/console.logger';
+import {TsvReader} from '../../common/libs/reader';
 
 class CommandImport implements Command {
   private readonly importErrorMessage: string = 'Error while importing file data.\nMessage error: ';
@@ -74,26 +74,23 @@ Example: ./src/main.cli.ts --import mocks/offer_rent.tsv`;
 
   private async saveOffer(offer: RentOffer): Promise<void> {
     const user: UserEntity = await this.userService.findOrCreate({
-      ...offer.user,
-      password: 'any'
+      ...offer.user, password: 'any'
     }, this.salt);
     await this.offerService.create({
       title: offer.title,
       description: offer.description,
-      publishedAt: offer.publishedAt.toISOString(),
       city: offer.city,
       previewImage: offer.previewImage,
       images: offer.images,
       isPremium: offer.isPremium,
       isFavourite: offer.isFavourite,
-      rating: offer.rating,
       type: offer.type,
       bedrooms: offer.bedrooms,
       maxAdults: offer.maxAdults,
       price: offer.price,
       goods: offer.goods,
       location: offer.location,
-      userId: user.id,
+      host: user.id
     });
   }
 }

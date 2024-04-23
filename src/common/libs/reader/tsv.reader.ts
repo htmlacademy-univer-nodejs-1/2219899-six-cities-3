@@ -1,4 +1,4 @@
-import {Reader} from './reader.interface';
+import {Reader} from './reader.interface.js';
 import {createReadStream, ReadStream} from 'node:fs';
 import {resolve as PathResolve} from 'node:path';
 import EventEmitter from 'node:events';

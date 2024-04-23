@@ -83,7 +83,7 @@ paths:
         - Users
       description: Завершение сессии пользователя
       responses:
-        200:
+        204:
           description: Сеанс завершен
         400:
           description: Некорректный запрос
@@ -127,8 +127,6 @@ paths:
                   $ref: "#/components/schemas/Offer"
         400:
           description: Некорректный запрос
-
-
     post:
       tags:
         - Offers
@@ -209,7 +207,7 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        204:
           description: Успешно удалено
         400:
           description: Некорректный запрос
@@ -536,7 +534,10 @@ components:
         - price
         - goods
         - location
+        - type
       properties:
+        type:
+          $ref: '#/components/schemas/AccommodationType'
         title:
           type: string
           minLength: 10

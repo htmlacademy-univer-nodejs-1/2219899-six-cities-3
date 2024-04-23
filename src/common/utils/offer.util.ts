@@ -1,5 +1,4 @@
-import {AccommodationType, ConveniencesEnum, RentOffer} from '../types';
-import {Location} from '../types/location.type';
+import {AccommodationType, ConveniencesEnum, Location, RentOffer, UserType,} from '../types';
 
 export function parseOffer(rawString: string): RentOffer {
   if (rawString === undefined || rawString.trim().length <= 1) {
@@ -8,13 +7,11 @@ export function parseOffer(rawString: string): RentOffer {
   const [
     title,
     description,
-    publishedAt,
     city,
     previewImage,
     images,
     isPremium,
     isFavourite,
-    rating,
     type,
     bedrooms,
     maxAdults,
@@ -23,26 +20,23 @@ export function parseOffer(rawString: string): RentOffer {
     userName,
     userEmail,
     userAvatar,
-    commentsCount,
+    userType,
     location
   ]: string[] = rawString.split('\t');
   return {
     title: title,
     description: description,
-    publishedAt: new Date(publishedAt),
     city,
     previewImage: previewImage,
     images: images.split(','),
     isPremium: Boolean(isPremium),
     isFavourite: Boolean(isFavourite),
-    rating: Number(rating),
     type: type as AccommodationType,
     bedrooms: Number(bedrooms),
     maxAdults: Number(maxAdults),
     price: Number(price),
     goods: goods.split(',') as ConveniencesEnum[],
-    user: {name: userName, email: userEmail, avatar: userAvatar},
-    commentsCount: Number(commentsCount),
+    user: {name: userName, email: userEmail, avatar: userAvatar, type: userType as UserType},
     location: parseLocation(location)
   };
 }

@@ -1,9 +1,9 @@
-import {DatabaseClient} from './db_client.interface';
+import {DatabaseClient} from './db_client.interface.js';
 import * as Mongoose from 'mongoose';
 import {Logger} from '../logger';
 import {inject, injectable} from 'inversify';
-import {Component} from '../types';
 import {setTimeout} from 'node:timers/promises';
+import {Component} from '../../types';
 
 @injectable()
 export class MongoClient implements DatabaseClient {

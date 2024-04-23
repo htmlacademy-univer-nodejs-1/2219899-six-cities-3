@@ -4,7 +4,7 @@ import {CommentEntity} from './comment.entity';
 import {CreateCommentDTO} from './dto';
 import {inject, injectable} from 'inversify';
 import {Component} from '../../types';
-import {Logger} from '../../logger';
+import {Logger} from '../../libs/logger';
 
 @injectable()
 export class DefaultCommentService implements CommentService {

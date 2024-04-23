@@ -1,4 +1,4 @@
-import {WriterInterface} from './writer.interface';
+import {WriterInterface} from './writer.interface.js';
 import {createWriteStream, WriteStream} from 'node:fs';
 import {resolve as filePathResolve} from 'node:path';
 

@@ -1,6 +1,6 @@
 import {DocumentType, types} from '@typegoose/typegoose';
-import {CommentService} from './comment-service.interface';
-import {CommentEntity} from './comment.entity';
+import {CommentService} from './comment-service.interface.js';
+import {CommentEntity} from './comment.entity.js';
 import {CreateCommentDTO} from './dto';
 import {inject, injectable} from 'inversify';
 import {Component} from '../../types';

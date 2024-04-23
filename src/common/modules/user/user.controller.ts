@@ -4,7 +4,7 @@ import {inject, injectable} from 'inversify';
 import {Component} from '../../types';
 import {UserService} from './user-service.interface.js';
 import {StatusCodes} from 'http-status-codes';
-import {schemaValidate} from '../../utils/dto.util.js';
+import {schemaValidate} from '../../utils';
 import {UserRDO} from './rdo';
 import {
   BaseController,

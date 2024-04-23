@@ -2,13 +2,10 @@ import {Command} from './command.interface.js';
 import chalk from 'chalk';
 import {RentOffer} from '../../common/types';
 import {DefaultUserService, UserEntity, UserModel, UserService} from '../../common/modules/user';
-import {OfferService} from '../../common/modules/offer/offer-service.interface.js';
-import {DefaultOfferService} from '../../common/modules/offer/offer.service.js';
-import {OfferModel} from '../../common/modules/offer/offer.entity.js';
+import {DefaultOfferService, OfferModel, OfferService} from '../../common/modules/offer';
 import {parseOffer} from '../../common/utils';
 import {DatabaseClient, MongoClient} from '../../common/libs/database_client';
-import {Logger} from '../../common/libs/logger';
-import {ConsoleLogger} from '../../common/libs/logger/console.logger';
+import {ConsoleLogger, Logger} from '../../common/libs/logger';
 import {TsvReader} from '../../common/libs/reader';
 
 class CommandImport implements Command {

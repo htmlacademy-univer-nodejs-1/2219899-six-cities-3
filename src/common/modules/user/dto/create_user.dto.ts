@@ -1,4 +1,4 @@
-import {UserType} from '../../../types/user-type.enum.js';
+import {UserType} from '../../../types';
 
 export class CreateUserDTO {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

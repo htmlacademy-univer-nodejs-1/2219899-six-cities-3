@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 
-import {CLIApplication} from './cli/cli.application';
+import {CLIApplication} from './cli/cli.application.js';
 import {Command, CommandGenerate, CommandHelp, CommandImport, CommandVersion} from './cli/commands';
 
 function main(): void {

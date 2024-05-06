@@ -1,4 +1,4 @@
-import {Limit} from './limit.type';
+import {Limit} from './limit.type.js';
 
 export type ServerMockData = {
   titles: string[];

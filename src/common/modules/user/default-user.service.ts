@@ -1,10 +1,10 @@
 import {inject, injectable} from 'inversify';
 import {Component} from '../../types';
-import {UserService} from './user-service.interface';
-import {Logger} from '../../logger';
-import {UserEntity} from './user.entity';
+import {UserService} from './user-service.interface.js';
+import {UserEntity} from './user.entity.js';
 import {DocumentType, types} from '@typegoose/typegoose';
 import {CreateUserDTO} from './dto';
+import {Logger} from '../../libs/logger';
 
 
 @injectable()

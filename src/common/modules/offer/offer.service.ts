@@ -1,10 +1,10 @@
 import {DocumentType, types} from '@typegoose/typegoose';
 import {CreateOfferDto, UpdateOfferDTO} from './dto';
-import {OfferService} from './offer-service.interface';
-import {OfferEntity} from './offer.entity';
+import {OfferService} from './offer-service.interface.js';
+import {OfferEntity} from './offer.entity.js';
 import {inject, injectable} from 'inversify';
 import {Component} from '../../types';
-import {Logger} from '../../logger';
+import {Logger} from '../../libs/logger';
 
 
 @injectable()
@@ -59,9 +59,9 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
-  async findFavouriteOffer(city: string): Promise<DocumentType<OfferEntity>[]> {
+  async findFavouriteOffer(): Promise<DocumentType<OfferEntity>[]> {
     return await this.offerModel
-      .find({city: city, isFavourite: true})
+      .find({isFavourite: true})
       .sort({publishedAt: 'desc'})
       .populate('userId')
       .exec();

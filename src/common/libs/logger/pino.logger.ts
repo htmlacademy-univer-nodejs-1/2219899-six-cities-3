@@ -1,4 +1,4 @@
-import {Logger} from './logger.interface';
+import {Logger} from './logger.interface.js';
 import {Logger as PinoLoggingInstance, pino} from 'pino';
 import {injectable} from 'inversify';
 

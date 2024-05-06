@@ -1,3 +1,5 @@
+import {UserType} from '../../../types';
+
 export class CreateUserDTO {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -8,5 +10,7 @@ export class CreateUserDTO {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   public password: string;
-  public avatar?: string | undefined;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  public type: UserType;
 }

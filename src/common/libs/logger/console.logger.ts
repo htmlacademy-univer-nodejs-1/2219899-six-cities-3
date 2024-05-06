@@ -1,4 +1,4 @@
-import {Logger} from './logger.interface';
+import {Logger} from './logger.interface.js';
 
 export class ConsoleLogger implements Logger {
   info(message: string, ...args: unknown[]): void {

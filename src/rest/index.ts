@@ -1,1 +1,1 @@
-export * from './rest.app';
+export * from './rest.app.js';

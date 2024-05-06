@@ -1,12 +1,9 @@
 import {Container} from 'inversify';
-import {RestApplication} from './rest.app';
+import {RestApplication} from './rest.app.js';
 import {Component} from '../common/types';
-import pino from 'pino';
 import {Config} from 'convict';
-import {RestConfig, RestSchema} from '../common/config';
-import {DatabaseClient, MongoClient} from '../common/database_client';
-import {PinoLogger} from '../common/logger';
-import Logger = pino.Logger;
+import {DatabaseClient, MongoClient} from '../common/libs/database_client';
+import {Logger} from '../common/libs/logger';
 
 
 export function createRestApplicationContainer(): Container {

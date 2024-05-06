@@ -1,4 +1,4 @@
-import {User} from '../../types';
+import {User, UserType} from '../../types';
 import {defaultClasses, getModelForClass, modelOptions, prop} from '@typegoose/typegoose';
 import {createSha256} from '../../utils';
 
@@ -21,11 +21,15 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   @prop({required: true, default: '', type: () => String})
   private password?: string;
 
+  @prop({ required: true, type: () => String })
+  public type: UserType;
+
   constructor(user: User) {
     super();
     this.name = user.name;
     this.email = user.email;
     this.avatar = user.avatar;
+    this.type = user.type;
   }
 
   public setPassword(password: string, salt: string) {

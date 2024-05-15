@@ -1,6 +1,6 @@
 import {BaseController, HTTPException, RequestBody} from '../../libs/rest/index.js';
 import {inject, injectable} from 'inversify';
-import {Component} from '../../types';
+import {Component} from '../../types/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {CommentService} from './comment-service.interface.js';
 import {UserService} from '../user/index.js';

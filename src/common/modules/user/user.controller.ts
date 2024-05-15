@@ -12,10 +12,10 @@ import {
   HttpMethod,
   RequestBody,
   RequestParams, ValidateObjectIDMiddleware
-} from '../../libs/rest';
-import {Logger} from '../../libs/logger';
-import {Config, RestSchema} from '../../libs/config';
-import {ValidateDTOMiddleware} from '../../libs/rest';
+} from '../../libs/rest/index.js';
+import {Logger} from '../../libs/logger/index.js';
+import {Config, RestSchema} from '../../libs/config/index.js';
+import {ValidateDTOMiddleware} from '../../libs/rest/index.js';
 
 type CreateUserRequest = Request<RequestParams, RequestBody, CreateUserDTO>;
 type LoginRequest = Request<RequestParams, RequestBody, LoginDTO>

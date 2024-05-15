@@ -1,5 +1,5 @@
 import {Expose, Type} from 'class-transformer';
-import {UserRDO} from '../../user';
+import {UserRDO} from '../../user/index.js';
 
 export class OfferRDO {
   @Expose()

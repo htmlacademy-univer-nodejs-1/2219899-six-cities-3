@@ -13,10 +13,10 @@ import {
   RequestBody,
   RequestParams,
   RequestQuery
-} from '../../libs/rest';
-import {Logger} from '../../libs/logger';
-import {CommentRdo} from '../comment/rdo/comment.rdo';
-import {CommentService} from '../comment';
+} from '../../libs/rest/index.js';
+import {Logger} from '../../libs/logger/index.js';
+import {CommentRdo} from '../comment/rdo/comment.rdo.js';
+import {CommentService} from '../comment/index.js';
 import {ParamsDictionary} from 'express-serve-static-core';
 
 export type ParamOfferId = { offerId: string } | ParamsDictionary;

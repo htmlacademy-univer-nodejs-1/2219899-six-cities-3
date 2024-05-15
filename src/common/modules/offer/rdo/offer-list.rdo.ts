@@ -1,5 +1,5 @@
 import {Expose} from 'class-transformer';
-import {City, AccommodationType} from '../../../types';
+import {City, AccommodationType} from '../../../types/index.js';
 
 export class OfferListRdo {
   @Expose()

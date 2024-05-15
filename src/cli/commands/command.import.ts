@@ -80,7 +80,6 @@ Example: ./src/main.cli.ts --import mocks/offer_rent.tsv`;
       previewImage: offer.previewImage,
       images: offer.images,
       isPremium: offer.isPremium,
-      isFavourite: offer.isFavourite,
       type: offer.type,
       bedrooms: offer.bedrooms,
       maxAdults: offer.maxAdults,

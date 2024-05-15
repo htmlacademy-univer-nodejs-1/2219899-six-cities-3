@@ -91,10 +91,12 @@ export class DefaultOfferService implements OfferService {
           $lookup: {
             from: 'comments',
             pipeline: [
-              { $match: { offerId: offerId } },
-              { $group: {
+              {$match: {offerId: offerId}},
+              {
+                $group: {
                   _id: null,
-                  avg: { '$avg': '$rating' }}
+                  avg: {'$avg': '$rating'}
+                }
               }
             ],
             as: 'avg'

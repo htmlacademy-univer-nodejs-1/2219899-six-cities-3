@@ -8,3 +8,4 @@ export * from './user.type.js';
 export * from './location.type.js';
 export * from './user.type.js';
 export * from './user-type.enum.js';
+export * from './city.enum.js';

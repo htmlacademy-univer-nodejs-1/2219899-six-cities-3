@@ -71,7 +71,7 @@ Example: ./src/main.cli.ts --import mocks/offer_rent.tsv`;
 
   private async saveOffer(offer: RentOffer): Promise<void> {
     const user: UserEntity = await this.userService.findOrCreate({
-      ...offer.user, password: 'any'
+      ...offer.user, password: 'any', avatarUrl: undefined
     }, this.salt);
     await this.offerService.create({
       title: offer.title,
@@ -86,7 +86,7 @@ Example: ./src/main.cli.ts --import mocks/offer_rent.tsv`;
       maxAdults: offer.maxAdults,
       price: offer.price,
       goods: offer.goods,
-      location: offer.location,
+      location: [offer.location.latitude, offer.location.longitude],
       host: user.id
     });
   }

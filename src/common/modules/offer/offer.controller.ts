@@ -3,7 +3,7 @@ import {Component} from '../../types';
 import {OfferService} from './offer-service.interface.js';
 import {Request, Response} from 'express';
 import {schemaValidate} from '../../utils';
-import {OfferRDO} from './rdo';
+import {OfferListRdo, OfferRDO} from './rdo';
 import {CreateOfferDto} from './dto';
 import {StatusCodes} from 'http-status-codes';
 import {
@@ -11,18 +11,23 @@ import {
   HTTPException,
   HttpMethod,
   RequestBody,
-  RequestParams
+  RequestParams,
+  RequestQuery
 } from '../../libs/rest';
 import {Logger} from '../../libs/logger';
+import {CommentRdo} from '../comment/rdo/comment.rdo';
+import {CommentService} from '../comment';
+import {ParamsDictionary} from 'express-serve-static-core';
 
-
+export type ParamOfferId = { offerId: string } | ParamsDictionary;
 type CreateUpdateOfferRequest = Request<RequestParams, RequestBody, CreateOfferDto>;
 
 @injectable()
 export class OfferController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
-    @inject(Component.OfferService) private readonly offerService: OfferService
+    @inject(Component.OfferService) private readonly offerService: OfferService,
+    @inject(Component.CommentService) private readonly commentService: CommentService,
   ) {
     super(logger);
 
@@ -43,22 +48,31 @@ export class OfferController extends BaseController {
       path: '/favourites/:id',
       handler: this.deleteFavoriteOffer
     });
+    this.addRoute({
+      handler: this.getOfferComments,
+      method: HttpMethod.GET,
+      path: '/offers/:offerId/comments'
+    });
   }
 
-  public async getOffers(_req: Request, res: Response): Promise<void> {
-    const offer = await this.offerService.find();
-    const responseData = schemaValidate(Array<OfferRDO>, offer);
+  public async getOffers(
+    {query}: Request<unknown, unknown, unknown, RequestQuery>,
+    res: Response
+  ): Promise<void> {
+    const offer = await this.offerService.find(query.limit);
+    const responseData = schemaValidate(Array<OfferListRdo>, offer);
     this.ok(res, responseData);
   }
 
   public async createOffer({body}: CreateUpdateOfferRequest, res: Response): Promise<void> {
     const result = await this.offerService.create(body);
-    const responseData = schemaValidate(OfferRDO, result);
+    const offer = await this.offerService.findById(result.id);
+    const responseData = schemaValidate(OfferRDO, offer);
     this.created(res, responseData);
   }
 
-  public async getOfferById(req: Request, res: Response): Promise<void> {
-    const offerId = req.params.id;
+  public async getOfferById({params}: Request, res: Response): Promise<void> {
+    const offerId = params.id;
     const offer = await this.offerService.findById(offerId);
     if (!offer) {
       throw new HTTPException(StatusCodes.NOT_FOUND, 'Not found');
@@ -67,19 +81,22 @@ export class OfferController extends BaseController {
     this.ok(res, offerRDO);
   }
 
-  public async updateOfferByID(req: CreateUpdateOfferRequest, res: Response): Promise<void> {
-    const offerId = String(req.params.id);
+  public async updateOfferByID({
+    body,
+    params
+  }: CreateUpdateOfferRequest, res: Response): Promise<void> {
+    const offerId = String(params.id);
     const offer = await this.offerService.findById(offerId);
     if (!offer) {
       throw new HTTPException(StatusCodes.BAD_REQUEST, 'Bad Request');
     }
-    const updated = await this.offerService.updateById(offerId, req.body);
+    const updated = await this.offerService.updateById(offerId, body);
     const offerRDO = schemaValidate(OfferRDO, updated);
     this.ok(res, offerRDO);
   }
 
-  public async deleteOfferById(req: Request, res: Response): Promise<void> {
-    const offerId = String(req.params.id);
+  public async deleteOfferById({params}: Request, res: Response): Promise<void> {
+    const offerId = String(params.id);
     const offer = await this.offerService.findById(offerId);
     if (!offer) {
       throw new HTTPException(StatusCodes.BAD_REQUEST, 'Bad Request');
@@ -88,24 +105,27 @@ export class OfferController extends BaseController {
     this.noContent(res);
   }
 
-  public async getPremiumOffers(req: Request, res: Response): Promise<void> {
-    const city = req.params.city;
+  public async getPremiumOffers(
+    {query}: Request<unknown, unknown, unknown, RequestQuery>,
+    res: Response
+  ): Promise<void> {
+    const city = query.city;
     if (!city) {
       throw new HTTPException(StatusCodes.BAD_REQUEST, '"city" is required at params');
     }
     const offers = await this.offerService.findPremiumOffers(city);
-    const responseData = schemaValidate(Array<OfferRDO>, offers);
+    const responseData = schemaValidate(Array<OfferListRdo>, offers);
     this.ok(res, responseData);
   }
 
   public async getFavouritesOffers(_req: Request, res: Response): Promise<void> {
     const favouriteOffers = await this.offerService.findFavouriteOffer();
-    const responseData = schemaValidate(Array<OfferRDO>, favouriteOffers);
+    const responseData = schemaValidate(Array<OfferListRdo>, favouriteOffers);
     this.ok(res, responseData);
   }
 
-  public async addFavoriteOffer(req: Request, res: Response): Promise<void> {
-    const offerId = req.params.id;
+  public async addFavoriteOffer({params}: Request, res: Response): Promise<void> {
+    const offerId = params.id;
     if (!offerId) {
       throw new HTTPException(StatusCodes.BAD_REQUEST, 'Bad request');
     }
@@ -118,8 +138,8 @@ export class OfferController extends BaseController {
     this.ok(res, responseData);
   }
 
-  public async deleteFavoriteOffer(req: Request, res: Response): Promise<void> {
-    const offerId = req.params.id;
+  public async deleteFavoriteOffer({params}: Request, res: Response): Promise<void> {
+    const offerId = params.id;
     if (!offerId) {
       throw new HTTPException(StatusCodes.BAD_REQUEST, 'Bad Request');
     }
@@ -130,5 +150,13 @@ export class OfferController extends BaseController {
     const result = await this.offerService.deleteFavourite(offerId);
     const responseData = schemaValidate(OfferRDO, result);
     this.ok(res, responseData);
+  }
+
+  public async getOfferComments({params}: Request<ParamOfferId>, res: Response): Promise<void> {
+    if (!await this.offerService.isExists(params.offerId)) {
+      throw new HTTPException(StatusCodes.NOT_FOUND, `Offer with id ${params.offerId} not found.`);
+    }
+    const comments = await this.commentService.getCommentsByOfferId(params.offerId);
+    this.ok(res, schemaValidate(CommentRdo, comments));
   }
 }

@@ -5,6 +5,7 @@ import express, {Express} from 'express';
 import {Logger} from '../common/libs/logger';
 import {Config, RestSchema} from '../common/libs/config';
 import {DatabaseClient} from '../common/libs/database_client';
+import {Controller} from '../common/libs/rest';
 
 @injectable()
 export class RestApplication {
@@ -13,16 +14,25 @@ export class RestApplication {
   private readonly logger: Logger;
   private readonly config: Config<RestSchema>;
   private readonly databaseClient: DatabaseClient;
+  private readonly offerController: Controller;
+  private readonly userController: Controller;
+  private readonly commentController: Controller;
   private readonly app: Express;
 
   constructor(
     @inject(Component.Logger) logger: Logger,
     @inject(Component.Config) config: Config<RestSchema>,
-    @inject(Component.DatabaseClient) databaseClient: DatabaseClient
+    @inject(Component.DatabaseClient) databaseClient: DatabaseClient,
+    @inject(Component.OfferController) offerController: Controller,
+    @inject(Component.UserController) userController: Controller,
+    @inject(Component.CommentController) commentController: Controller,
   ) {
     this.logger = logger;
     this.config = config;
     this.databaseClient = databaseClient;
+    this.offerController = offerController;
+    this.userController = userController;
+    this.commentController = commentController;
     this.app = express();
   }
 
@@ -48,6 +58,10 @@ export class RestApplication {
     await this.initMiddleware();
     this.logger.info('Middleware successfully initialized');
 
+    this.logger.info('Init Controllers');
+    await this.initControllers();
+    this.logger.info('Controllers are initialized');
+
     this.logger.info(`Get value from env $PORT: ${this.config.get('PORT')}`);
     await this.initServer();
     this.logger.info(`🚀 Express server is initialized and listening at ${this.config.get('PORT')} port`);
@@ -60,5 +74,11 @@ export class RestApplication {
 
   private async initMiddleware(): Promise<void> {
     this.app.use(express.json());
+  }
+
+  private async initControllers(): Promise<void> {
+    this.app.use('', this.userController.router);
+    this.app.use('', this.offerController.router);
+    this.app.use('', this.commentController.router);
   }
 }

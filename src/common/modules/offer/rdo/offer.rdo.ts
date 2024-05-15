@@ -1,4 +1,5 @@
-import {Expose} from 'class-transformer';
+import {Expose, Type} from 'class-transformer';
+import {UserRDO} from '../../user';
 
 export class OfferRDO {
   @Expose()
@@ -44,6 +45,7 @@ export class OfferRDO {
   public goods!: string;
 
   @Expose()
+  @Type(() => UserRDO)
   public host!: string;
 
   @Expose()

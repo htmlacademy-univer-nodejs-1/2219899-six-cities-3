@@ -1,8 +1,10 @@
+import {IsEmail, IsString} from 'class-validator';
+import {CreateLoginUserMessage} from './login-user.messages.js';
+
 export class LoginDTO {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  public email: string;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  public password: string;
+  @IsEmail({}, {message: CreateLoginUserMessage.email.invalidFormat})
+  public email!: string;
+
+  @IsString({message: CreateLoginUserMessage.password.invalidFormat})
+  public password!: string;
 }

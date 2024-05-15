@@ -2,6 +2,7 @@ import {Response, Router} from 'express';
 import {Controller, Route} from '../types';
 import {Logger} from '../../logger';
 import {StatusCodes} from 'http-status-codes';
+import asyncHandler from 'express-async-handler';
 
 export class BaseController implements Controller {
   readonly router: Router;
@@ -13,7 +14,12 @@ export class BaseController implements Controller {
   }
 
   addRoute(route: Route): void {
-    this.router[route.method](route.path, route.handler.bind(this));
+    const wrapperAsyncHandler = asyncHandler(route.handler.bind(this));
+    const middlewareHandlers = route.middlewares?.map(
+      (middleware) => asyncHandler(middleware.execute.bind(middleware))
+    );
+    const handlers = middlewareHandlers ? [...middlewareHandlers, wrapperAsyncHandler] : wrapperAsyncHandler;
+    this.router[route.method](route.path, handlers);
     this.logger.info(`Route registered: ${route.method.toUpperCase()} ${route.path}`);
   }
 

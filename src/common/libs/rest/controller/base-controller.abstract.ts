@@ -1,6 +1,6 @@
 import {Response, Router} from 'express';
-import {Controller, Route} from '../types';
-import {Logger} from '../../logger';
+import {Controller, Route} from '../types/index.js';
+import {Logger} from '../../logger/index.js';
 import {StatusCodes} from 'http-status-codes';
 import asyncHandler from 'express-async-handler';
 

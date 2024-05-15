@@ -1,5 +1,5 @@
 import {IsMongoId, IsNumber, IsString, Length, Max, Min} from 'class-validator';
-import {CreateCommentMessages} from './create-comment.messages';
+import {CreateCommentMessages} from './create-comment.messages.js';
 
 export class CreateCommentDTO {
   @IsString({message: CreateCommentMessages.comment.invalidFormat})

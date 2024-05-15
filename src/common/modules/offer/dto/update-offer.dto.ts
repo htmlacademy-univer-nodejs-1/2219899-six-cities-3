@@ -1,4 +1,4 @@
-import {AccommodationType, ConveniencesEnum} from '../../../types';
+import {AccommodationType, ConveniencesEnum} from '../../../types/index.js';
 import {
   IsArray,
   IsBoolean,
@@ -15,7 +15,7 @@ import {
   MinLength
 } from 'class-validator';
 import {UpdateOfferValidationMessage} from './update-offer.messages.js';
-import {City} from '../../../types';
+import {City} from '../../../types/index.js';
 
 export class UpdateOfferDTO {
   @IsOptional()

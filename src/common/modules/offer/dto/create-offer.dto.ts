@@ -1,4 +1,4 @@
-import {AccommodationType, ConveniencesEnum} from '../../../types';
+import {AccommodationType, ConveniencesEnum} from '../../../types/index.js';
 import {
   IsArray,
   IsBoolean,
@@ -12,8 +12,8 @@ import {
   Min,
   MinLength
 } from 'class-validator';
-import {CreateOfferValidationMessage} from './create-offer.messages';
-import {City} from '../../../types';
+import {CreateOfferValidationMessage} from './create-offer.messages.js';
+import {City} from '../../../types/index.js';
 
 export class CreateOfferDto {
   @IsString({message: CreateOfferValidationMessage.title.required})

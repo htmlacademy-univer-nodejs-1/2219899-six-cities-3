@@ -1,4 +1,4 @@
-import {AccommodationType, City, ConveniencesEnum, Location, RentOffer, UserType,} from '../types';
+import {AccommodationType, City, ConveniencesEnum, Location, RentOffer, UserType,} from '../types/index.js';
 
 export function parseOffer(rawString: string): RentOffer {
   if (rawString === undefined || rawString.trim().length <= 1) {

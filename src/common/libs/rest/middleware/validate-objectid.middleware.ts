@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from 'express';
 import {Types} from 'mongoose';
-import {HTTPException} from '../errors';
+import {HTTPException} from '../errors/index.js';
 import {StatusCodes} from 'http-status-codes';
 import {Middleware} from './middleware.interface.js';
 

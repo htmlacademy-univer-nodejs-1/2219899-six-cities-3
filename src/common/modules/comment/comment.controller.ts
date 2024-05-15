@@ -1,15 +1,15 @@
-import {BaseController, HTTPException, RequestBody} from '../../libs/rest';
+import {BaseController, HTTPException, RequestBody} from '../../libs/rest/index.js';
 import {inject, injectable} from 'inversify';
 import {Component} from '../../types';
-import {Logger} from '../../libs/logger';
-import {CommentService} from './comment-service.interface';
-import {UserService} from '../user';
-import {OfferService} from '../offer';
+import {Logger} from '../../libs/logger/index.js';
+import {CommentService} from './comment-service.interface.js';
+import {UserService} from '../user/index.js';
+import {OfferService} from '../offer/index.js';
 import {StatusCodes} from 'http-status-codes';
-import {schemaValidate} from '../../utils';
+import {schemaValidate} from '../../utils/index.js';
 import {Request, Response} from 'express';
-import {CreateCommentDTO} from './dto';
-import {CommentRdo} from './rdo';
+import {CreateCommentDTO} from './dto/index.js';
+import {CommentRdo} from './rdo/index.js';
 
 type ParamOfferId = {offerId: string};
 type CreateCommentRequest = Request<ParamOfferId, RequestBody, CreateCommentDTO>;

@@ -1,10 +1,10 @@
 import {inject, injectable} from 'inversify';
-import {Component} from '../../types';
+import {Component} from '../../types/index.js';
 import {OfferService} from './offer-service.interface.js';
 import {Request, Response} from 'express';
-import {schemaValidate} from '../../utils';
-import {OfferListRdo, OfferRDO} from './rdo';
-import {CreateOfferDto} from './dto';
+import {schemaValidate} from '../../utils/index.js';
+import {OfferListRdo, OfferRDO} from './rdo/index.js';
+import {CreateOfferDto} from './dto/index.js';
 import {StatusCodes} from 'http-status-codes';
 import {
   BaseController,

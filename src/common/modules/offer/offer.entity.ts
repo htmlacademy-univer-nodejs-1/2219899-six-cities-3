@@ -6,8 +6,8 @@ import {
   Ref,
   Severity
 } from '@typegoose/typegoose';
-import {AccommodationType, ConveniencesEnum} from '../../types';
-import {UserEntity} from '../user';
+import {AccommodationType, ConveniencesEnum} from '../../types/index.js';
+import {UserEntity} from '../user/index.js';
 import {Location} from '../../types/location.type.js';
 
 export interface OfferEntity extends defaultClasses.Base {

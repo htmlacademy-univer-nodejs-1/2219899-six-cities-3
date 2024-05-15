@@ -1,10 +1,10 @@
 import {DocumentType, types} from '@typegoose/typegoose';
-import {CreateOfferDto, UpdateOfferDTO} from './dto';
+import {CreateOfferDto, UpdateOfferDTO} from './dto/index.js';
 import {OfferService} from './offer-service.interface.js';
 import {OfferEntity} from './offer.entity.js';
 import {inject, injectable} from 'inversify';
-import {Component} from '../../types';
-import {Logger} from '../../libs/logger';
+import {Component} from '../../types/index.js';
+import {Logger} from '../../libs/logger/index.js';
 
 
 @injectable()

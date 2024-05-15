@@ -1,11 +1,11 @@
 import {inject, injectable} from 'inversify';
-import {Component} from '../common/types';
-import {getMongoURI} from '../common/utils';
+import {Component} from '../common/types/index.js';
+import {getMongoURI} from '../common/utils/index.js';
 import express, {Express} from 'express';
-import {Logger} from '../common/libs/logger';
-import {Config, RestSchema} from '../common/libs/config';
-import {DatabaseClient} from '../common/libs/database_client';
-import {Controller} from '../common/libs/rest';
+import {Logger} from '../common/libs/logger/index.js';
+import {Config, RestSchema} from '../common/libs/config/index.js';
+import {DatabaseClient} from '../common/libs/database_client/index.js';
+import {Controller} from '../common/libs/rest/index.js';
 
 @injectable()
 export class RestApplication {

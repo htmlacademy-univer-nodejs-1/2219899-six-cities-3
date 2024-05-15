@@ -1,9 +1,9 @@
 import {Container} from 'inversify';
 import {RestApplication} from './rest.app.js';
-import {Component} from '../common/types';
+import {Component} from '../common/types/index.js';
 import {Config} from 'convict';
-import {DatabaseClient, MongoClient} from '../common/libs/database_client';
-import {Logger} from '../common/libs/logger';
+import {DatabaseClient, MongoClient} from '../common/libs/database_client/index.js';
+import {Logger} from '../common/libs/logger/index.js';
 
 
 export function createRestApplicationContainer(): Container {

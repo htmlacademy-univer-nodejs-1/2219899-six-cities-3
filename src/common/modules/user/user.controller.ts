@@ -1,11 +1,11 @@
-import {CreateUserDTO, LoginDTO} from './dto';
+import {CreateUserDTO, LoginDTO} from './dto/index.js';
 import {Request, Response} from 'express';
 import {inject, injectable} from 'inversify';
-import {Component} from '../../types';
+import {Component} from '../../types/index.js';
 import {UserService} from './user-service.interface.js';
 import {StatusCodes} from 'http-status-codes';
-import {schemaValidate} from '../../utils';
-import {UserRDO} from './rdo';
+import {schemaValidate} from '../../utils/index.js';
+import {UserRDO} from './rdo/index.js';
 import {
   BaseController,
   HTTPException,

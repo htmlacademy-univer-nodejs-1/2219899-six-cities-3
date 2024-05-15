@@ -1,4 +1,4 @@
-import {Limit} from '../types';
+import {Limit} from '../types/index.js';
 
 export class Random {
   public static getRandomInteger({min, max}: Limit): number {

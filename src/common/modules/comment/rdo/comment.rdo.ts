@@ -1,6 +1,6 @@
 import {Expose, Type} from 'class-transformer';
-import {OfferRDO} from '../../offer';
-import {UserRDO} from '../../user';
+import {OfferRDO} from '../../offer/index.js';
+import {UserRDO} from '../../user/index.js';
 
 
 export class CommentRdo {

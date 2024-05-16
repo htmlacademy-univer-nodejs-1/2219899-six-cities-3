@@ -1,4 +1,4 @@
-import {Command} from './commands';
+import {Command} from './commands/index.js';
 import chalk from 'chalk';
 
 type OptionalCommand = Command | undefined;

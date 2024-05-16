@@ -1,6 +1,6 @@
 export class HTTPException extends Error {
   public statusCode!: number;
-  public detail?: any;
+  public detail?: string;
 
   constructor(statusCode: number, message: string, detail?: string) {
     super(message);

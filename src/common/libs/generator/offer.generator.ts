@@ -1,6 +1,6 @@
 import {TypeGenerator} from './generator.interface.js';
-import {ServerMockData, UserType} from '../../types';
-import {Random} from '../../utils';
+import {ServerMockData, UserType} from '../../types/index.js';
+import {Random} from '../../utils/index.js';
 
 export class OfferGenerator implements TypeGenerator {
 

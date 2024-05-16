@@ -1,10 +1,10 @@
 import {DocumentType, types} from '@typegoose/typegoose';
 import {CommentService} from './comment-service.interface.js';
 import {CommentEntity} from './comment.entity.js';
-import {CreateCommentDTO} from './dto';
+import {CreateCommentDTO} from './dto/index.js';
 import {inject, injectable} from 'inversify';
-import {Component} from '../../types';
-import {Logger} from '../../libs/logger';
+import {Component} from '../../types/index.js';
+import {Logger} from '../../libs/logger/index.js';
 
 @injectable()
 export class DefaultCommentService implements CommentService {
@@ -14,15 +14,24 @@ export class DefaultCommentService implements CommentService {
   ) {
   }
 
-  async create(commentSchema: CreateCommentDTO): Promise<DocumentType<CommentEntity>> {
-    const comment = await this.commentModel.create(commentSchema);
-    this.logger.info(`New comment created: ${comment.id}`);
-    return comment.populate('userId');
+  async create(dto: CreateCommentDTO): Promise<DocumentType<CommentEntity>> {
+    const comment = await this.commentModel.create(dto);
+    this.logger.info(`Comment ${comment.comment} is created`);
+    return comment.populate(['userId', 'offerId']);
+
   }
 
-  async getCommentByOfferId(offerId: string): Promise<DocumentType<CommentEntity>[]> {
+  async getCommentsByOfferId(offerId: string): Promise<DocumentType<CommentEntity>[]> {
     return this.commentModel
       .find({offerId: offerId})
-      .populate('userId');
+      .populate(['userId', 'offerId']);
+  }
+
+  async deleteByOfferId(offerId: string): Promise<number> {
+    const result = await this.commentModel
+      .deleteMany({offerId})
+      .exec();
+
+    return result.deletedCount;
   }
 }

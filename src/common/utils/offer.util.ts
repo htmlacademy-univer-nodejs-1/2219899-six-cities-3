@@ -1,4 +1,4 @@
-import {AccommodationType, ConveniencesEnum, Location, RentOffer, UserType,} from '../types';
+import {AccommodationType, City, ConveniencesEnum, Location, RentOffer, UserType,} from '../types/index.js';
 
 export function parseOffer(rawString: string): RentOffer {
   if (rawString === undefined || rawString.trim().length <= 1) {
@@ -26,7 +26,7 @@ export function parseOffer(rawString: string): RentOffer {
   return {
     title: title,
     description: description,
-    city,
+    city: city as City,
     previewImage: previewImage,
     images: images.split(','),
     isPremium: Boolean(isPremium),
@@ -36,7 +36,7 @@ export function parseOffer(rawString: string): RentOffer {
     maxAdults: Number(maxAdults),
     price: Number(price),
     goods: goods.split(',') as ConveniencesEnum[],
-    user: {name: userName, email: userEmail, avatar: userAvatar, type: userType as UserType},
+    user: {name: userName, email: userEmail, avatarUrl: userAvatar, type: userType as UserType},
     location: parseLocation(location)
   };
 }

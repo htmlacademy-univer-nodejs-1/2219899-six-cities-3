@@ -1,12 +1,12 @@
 import {Command} from './command.interface.js';
 import chalk from 'chalk';
-import {RentOffer} from '../../common/types';
-import {DefaultUserService, UserEntity, UserModel, UserService} from '../../common/modules/user';
-import {DefaultOfferService, OfferModel, OfferService} from '../../common/modules/offer';
-import {parseOffer} from '../../common/utils';
-import {DatabaseClient, MongoClient} from '../../common/libs/database_client';
-import {ConsoleLogger, Logger} from '../../common/libs/logger';
-import {TsvReader} from '../../common/libs/reader';
+import {RentOffer} from '../../common/types/index.js';
+import {DefaultUserService, UserEntity, UserModel, UserService} from '../../common/modules/user/index.js';
+import {DefaultOfferService, OfferModel, OfferService} from '../../common/modules/offer/index.js';
+import {parseOffer} from '../../common/utils/index.js';
+import {DatabaseClient, MongoClient} from '../../common/libs/database_client/index.js';
+import {ConsoleLogger, Logger} from '../../common/libs/logger/index.js';
+import {TsvReader} from '../../common/libs/reader/index.js';
 
 class CommandImport implements Command {
   private readonly importErrorMessage: string = 'Error while importing file data.\nMessage error: ';
@@ -71,7 +71,7 @@ Example: ./src/main.cli.ts --import mocks/offer_rent.tsv`;
 
   private async saveOffer(offer: RentOffer): Promise<void> {
     const user: UserEntity = await this.userService.findOrCreate({
-      ...offer.user, password: 'any'
+      ...offer.user, password: 'any', avatarUrl: undefined
     }, this.salt);
     await this.offerService.create({
       title: offer.title,
@@ -80,13 +80,12 @@ Example: ./src/main.cli.ts --import mocks/offer_rent.tsv`;
       previewImage: offer.previewImage,
       images: offer.images,
       isPremium: offer.isPremium,
-      isFavourite: offer.isFavourite,
       type: offer.type,
       bedrooms: offer.bedrooms,
       maxAdults: offer.maxAdults,
       price: offer.price,
       goods: offer.goods,
-      location: offer.location,
+      location: [offer.location.latitude, offer.location.longitude],
       host: user.id
     });
   }

@@ -1,6 +1,6 @@
 import {DocumentType} from '@typegoose/typegoose';
 import {OfferEntity} from './offer.entity';
-import {CreateOfferDto, UpdateOfferDTO} from './dto';
+import {CreateOfferDto, UpdateOfferDTO} from './dto/index.js';
 
 export interface OfferService {
   create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;

@@ -1,10 +1,10 @@
 import {NextFunction, Request, Response} from 'express';
 import {ExceptionFilter} from './exception-filter.interface.js';
 import {inject, injectable} from 'inversify';
-import {Logger} from '../../logger';
-import {HTTPException} from '../errors';
+import {Logger} from '../../logger/index.js';
+import {HTTPException} from '../errors/index.js';
 import {StatusCodes} from 'http-status-codes';
-import {Component} from '../../../types';
+import {Component} from '../../../types/index.js';
 
 @injectable()
 export class AppExceptionFilter implements ExceptionFilter {

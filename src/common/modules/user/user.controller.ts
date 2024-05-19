@@ -11,11 +11,13 @@ import {
   HTTPException,
   HttpMethod,
   RequestBody,
-  RequestParams, ValidateObjectIDMiddleware
+  RequestParams,
+  UploadFileMiddleware,
+  ValidateDTOMiddleware,
+  ValidateObjectIDMiddleware
 } from '../../libs/rest/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {Config, RestSchema} from '../../libs/config/index.js';
-import {ValidateDTOMiddleware} from '../../libs/rest/index.js';
 
 type CreateUserRequest = Request<RequestParams, RequestBody, CreateUserDTO>;
 type LoginRequest = Request<RequestParams, RequestBody, LoginDTO>
@@ -46,7 +48,10 @@ export class UserController extends BaseController {
     this.addRoute({
       handler: this.uploadAvatar,
       method: HttpMethod.POST,
-      middlewares: [new ValidateObjectIDMiddleware('userId')],
+      middlewares: [
+        new ValidateObjectIDMiddleware('userId'),
+        new UploadFileMiddleware(this.config.get('UPLOAD_DIRECTORY'), 'avatar'),
+      ],
       path: '/:userId/avatar'
     });
   }
@@ -81,6 +86,6 @@ export class UserController extends BaseController {
   }
 
   public async uploadAvatar(_req: Request, _res: Response): Promise<void> {
-    throw new HTTPException(StatusCodes.NOT_IMPLEMENTED, 'Not implemented');
+    this.created(_res, {filepath: _req.file?.path});
   }
 }

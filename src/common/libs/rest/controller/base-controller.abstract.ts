@@ -3,7 +3,9 @@ import {Controller, Route} from '../types/index.js';
 import {Logger} from '../../logger/index.js';
 import {StatusCodes} from 'http-status-codes';
 import asyncHandler from 'express-async-handler';
+import {injectable} from 'inversify';
 
+@injectable()
 export class BaseController implements Controller {
   readonly router: Router;
   protected readonly logger: Logger;

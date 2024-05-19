@@ -74,7 +74,7 @@ export class RestApplication {
 
   private async initMiddleware(): Promise<void> {
     this.app.use(express.json());
-    this.app.use('/upload', express.static(this.config.get('UPLOAD_DIRECTORY')))
+    this.app.use('/upload', express.static(this.config.get('UPLOAD_DIRECTORY')));
   }
 
   private async initControllers(): Promise<void> {

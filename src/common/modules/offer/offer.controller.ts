@@ -59,9 +59,7 @@ export class OfferController extends BaseController {
     {query}: Request<unknown, unknown, unknown, RequestQuery>,
     res: Response
   ): Promise<void> {
-    this.logger.info('Request to getOffers');
     const offer = await this.offerService.find(query.limit);
-    this.logger.info('Mongo')
     const responseData = schemaValidate(OfferListRdo, offer);
     this.ok(res, responseData);
   }

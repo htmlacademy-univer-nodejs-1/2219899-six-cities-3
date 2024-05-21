@@ -60,7 +60,7 @@ export class OfferController extends BaseController {
     res: Response
   ): Promise<void> {
     const offer = await this.offerService.find(query.limit);
-    const responseData = schemaValidate(Array<OfferListRdo>, offer);
+    const responseData = schemaValidate(OfferListRdo, offer);
     this.ok(res, responseData);
   }
 

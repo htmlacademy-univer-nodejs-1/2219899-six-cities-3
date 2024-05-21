@@ -1,14 +1,6 @@
-import {
-  defaultClasses,
-  getModelForClass,
-  modelOptions,
-  prop,
-  Ref,
-  Severity
-} from '@typegoose/typegoose';
-import {AccommodationType, ConveniencesEnum} from '../../types/index.js';
+import {defaultClasses, getModelForClass, modelOptions, prop, Ref} from '@typegoose/typegoose';
+import {AccommodationType, City, ConveniencesEnum} from '../../types/index.js';
 import {UserEntity} from '../user/index.js';
-import {Location} from '../../types/location.type.js';
 
 export interface OfferEntity extends defaultClasses.Base {
 
@@ -18,19 +10,19 @@ export interface OfferEntity extends defaultClasses.Base {
   schemaOptions: {collection: 'offers'}
 })
 export class OfferEntity extends defaultClasses.TimeStamps {
-  @prop({required: true, minlength: 10, maxlength: 100, type: () => String})
+  @prop({trim: true, required: true, minlength: 10, maxlength: 100, type: () => String})
   public title!: string;
 
-  @prop({required: true, minlength: 20, maxlength: 1024, type: () => String})
+  @prop({trim: true,required: true, minlength: 20, maxlength: 1024, type: () => String})
   public description!: string;
 
-  @prop({required: true, type: () => String})
+  @prop({required: true, type: () => String, enum: City})
   public city!: string;
 
   @prop({required: true, type: () => String})
   public previewImage!: string;
 
-  @prop({required: true, type: () => Array})
+  @prop({required: true, type: () => Array<string>})
   public images!: string[];
 
   @prop({required: true, type: () => Boolean})
@@ -54,7 +46,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true, min: 100, max: 100_000, type: () => Number})
   public price!: number;
 
-  @prop({required: true, type: () => Array})
+  @prop({required: true, type: () => Array<ConveniencesEnum>})
   public goods!: ConveniencesEnum[];
 
   @prop({required: true, default: 0, type: () => Number})
@@ -63,8 +55,8 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ref: UserEntity, required: true, type: () => String})
   public host!: Ref<UserEntity>;
 
-  @prop({required: true, type: () => Object, allowMixed: Severity.ALLOW})
-  public location!: Location;
+  @prop({required: true, type: () => Array<number>})
+  public location!: [number, number];
 }
 
 export const OfferModel = getModelForClass(OfferEntity);

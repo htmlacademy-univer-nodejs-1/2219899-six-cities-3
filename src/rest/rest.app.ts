@@ -38,11 +38,11 @@ export class RestApplication {
 
   private async initializeDatabase(): Promise<void> {
     const uri = getMongoURI(
-      this.config.get('DATABASE_USER'),
-      this.config.get('DATABASE_PASSWORD'),
-      this.config.get('DATABASE_HOST'),
-      this.config.get('DATABASE_PORT'),
-      this.config.get('DATABASE_NAME')
+      this.config.get('DB_USER'),
+      this.config.get('DB_PASSWORD'),
+      this.config.get('DB_HOST'),
+      this.config.get('DB_PORT'),
+      this.config.get('DB_NAME')
     );
 
     await this.databaseClient.connect(uri);
@@ -74,6 +74,7 @@ export class RestApplication {
 
   private async initMiddleware(): Promise<void> {
     this.app.use(express.json());
+    this.app.use('/upload', express.static(this.config.get('UPLOAD_DIRECTORY')));
   }
 
   private async initControllers(): Promise<void> {

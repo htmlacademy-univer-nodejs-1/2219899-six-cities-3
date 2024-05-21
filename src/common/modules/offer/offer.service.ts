@@ -28,8 +28,11 @@ export class DefaultOfferService implements OfferService {
   }
 
   async find(limit?: number): Promise<DocumentType<OfferEntity>[]> {
-    limit = limit ?? this.DEFAULT_OFFER_COUNT;
-    throw await this.offerModel.find().limit(limit).exec();
+    return await this.offerModel
+      .find()
+      .limit(limit ?? this.DEFAULT_OFFER_COUNT)
+      .populate('host')
+      .exec();
   }
 
   async updateById(offerId: string, updatedSchema: UpdateOfferDTO): Promise<DocumentType<OfferEntity> | null> {

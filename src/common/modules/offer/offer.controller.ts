@@ -68,11 +68,16 @@ export class OfferController extends BaseController {
   }
 
   public async getOffers(
-    {query}: Request<unknown, unknown, unknown, RequestQuery>,
+    {query, tokenPayload}: Request<unknown, unknown, unknown, RequestQuery>,
     res: Response
   ): Promise<void> {
-    const offer = await this.offerService.find(query.limit);
-    const responseData = schemaValidate(OfferListRdo, offer);
+    const offers = await this.offerService.find(query.limit);
+    if (!tokenPayload) {
+      offers.map((offer) => {
+        offer.isFavourite = false;
+      });
+    }
+    const responseData = schemaValidate(OfferListRdo, offers);
     this.ok(res, responseData);
   }
 

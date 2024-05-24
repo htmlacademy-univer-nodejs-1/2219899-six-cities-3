@@ -56,6 +56,14 @@ export class CommentController extends BaseController {
       );
     }
 
+    if (params.offerId !== body.offerId) {
+      throw new HTTPException(
+        StatusCodes.BAD_REQUEST,
+        'Offer Ids not equals.',
+        'CommentController'
+      );
+    }
+
     const comment = await this.commentService.create({...body, userId: tokenPayload.id});
     await this.offerService.incrementCommentCount(params.offerId);
     await this.offerService.updateOfferRating(params.offerId);

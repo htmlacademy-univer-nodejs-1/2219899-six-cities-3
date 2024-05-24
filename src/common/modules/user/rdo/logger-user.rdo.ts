@@ -1,4 +1,4 @@
-import { Expose } from 'class-transformer';
+import {Expose} from 'class-transformer';
 
 export class LoggedUserRdo {
   @Expose()
@@ -6,4 +6,10 @@ export class LoggedUserRdo {
 
   @Expose()
   public email!: string;
+
+  @Expose()
+  public avatarUrl!: string;
+
+  @Expose()
+  public name!: string;
 }

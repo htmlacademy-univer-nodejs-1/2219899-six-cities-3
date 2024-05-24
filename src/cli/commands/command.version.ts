@@ -1,6 +1,6 @@
 import {Command} from './command.interface.js';
 import chalk from 'chalk';
-import * as packageJson from '../../../package.json';
+import {version} from '../../../package.json';
 
 class CommandVersion implements Command {
   private readonly versionMessage: string = 'Project version is ';
@@ -14,15 +14,10 @@ class CommandVersion implements Command {
 
   async process(..._params: string[]): Promise<void> {
     try {
-      const version: string = this.getProjectVersion();
       console.info(chalk.greenBright(this.versionMessage + version));
     } catch (e: unknown) {
       console.error(this.errorMessage);
     }
-  }
-
-  private getProjectVersion(): string {
-    return packageJson.version;
   }
 }
 

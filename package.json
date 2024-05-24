@@ -14,8 +14,8 @@
     "lint": "eslint src/ --ext .ts",
     "compile": "tsc -p tsconfig.json",
     "clean": "rimraf dist",
-    "ts": "ts-node",
-    "dev:cli": "tsx ./src/main.cli.ts",
+    "ts": "tsx",
+    "dev:cli": "npm run ts ./src/main.cli.ts --",
     "mock:server": "json-server ./mocks/mock-server-data.json --port 8080",
     "start:dev": "tsx ./src/main.rest.ts | pino-pretty --colorize --translateTime SYS:standard"
   },

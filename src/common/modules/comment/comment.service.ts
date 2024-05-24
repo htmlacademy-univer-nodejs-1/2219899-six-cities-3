@@ -8,6 +8,8 @@ import {Logger} from '../../libs/logger/index.js';
 
 @injectable()
 export class DefaultCommentService implements CommentService {
+  private readonly COMMENTS_LIMIT: number = 50;
+
   public constructor(
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.CommentModel) private readonly commentModel: types.ModelType<CommentEntity>
@@ -24,6 +26,7 @@ export class DefaultCommentService implements CommentService {
   async getCommentsByOfferId(offerId: string): Promise<DocumentType<CommentEntity>[]> {
     return this.commentModel
       .find({offerId: offerId})
+      .limit(this.COMMENTS_LIMIT)
       .populate(['userId', 'offerId']);
   }
 

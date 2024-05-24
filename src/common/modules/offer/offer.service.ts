@@ -9,7 +9,7 @@ import {Logger} from '../../libs/logger/index.js';
 
 @injectable()
 export class DefaultOfferService implements OfferService {
-  private readonly DEFAULT_OFFER_COUNT: number = 50;
+  private readonly DEFAULT_OFFER_COUNT: number = 60;
 
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,

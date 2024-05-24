@@ -5,11 +5,12 @@ import {Component} from '../../types/index.js';
 import {UserService} from './user-service.interface.js';
 import {StatusCodes} from 'http-status-codes';
 import {schemaValidate} from '../../utils/index.js';
-import {UserRDO} from './rdo/index.js';
+import {LoggedUserRdo, UserRDO} from './rdo/index.js';
 import {
   BaseController,
   HTTPException,
   HttpMethod,
+  PrivateRouteMiddleware,
   RequestBody,
   RequestParams,
   UploadFileMiddleware,
@@ -18,6 +19,7 @@ import {
 } from '../../libs/rest/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {Config, RestSchema} from '../../libs/config/index.js';
+import {AuthService} from '../auth/index.js';
 
 type CreateUserRequest = Request<RequestParams, RequestBody, CreateUserDTO>;
 type LoginRequest = Request<RequestParams, RequestBody, LoginDTO>
@@ -27,7 +29,8 @@ export class UserController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.UserService) protected readonly userService: UserService,
-    @inject(Component.Config) private readonly config: Config<RestSchema>
+    @inject(Component.Config) private readonly config: Config<RestSchema>,
+    @inject(Component.AuthService) private readonly authService: AuthService,
   ) {
     super(logger);
 
@@ -41,10 +44,19 @@ export class UserController extends BaseController {
       handler: this.isUserAuthenticated,
       method: HttpMethod.GET,
       path: '/login',
+    });
+    this.addRoute({
+      handler: this.login,
+      method: HttpMethod.POST,
+      path: '/login',
       middlewares: [new ValidateDTOMiddleware(LoginDTO)]
     });
-    this.addRoute({handler: this.login, method: HttpMethod.POST, path: '/login'});
-    this.addRoute({handler: this.logout, method: HttpMethod.DELETE, path: '/logout'});
+    this.addRoute({
+      handler: this.logout,
+      method: HttpMethod.DELETE,
+      path: '/logout',
+      middlewares: [new PrivateRouteMiddleware()]
+    });
     this.addRoute({
       handler: this.uploadAvatar,
       method: HttpMethod.POST,
@@ -66,19 +78,25 @@ export class UserController extends BaseController {
     this.created(res, responseData);
   }
 
-  public async login(
-    {body}: LoginRequest,
-    _res: Response
-  ): Promise<void> {
-    const userExists = await this.userService.findByEmail(body.email);
-    if (userExists) {
-      throw new HTTPException(StatusCodes.UNAUTHORIZED, 'Incorrect email or password');
-    }
-    this.notImplemented(_res,);
+  public async login({body}: LoginRequest, res: Response): Promise<void> {
+    const user = await this.authService.verify(body);
+    const token = await this.authService.authenticate(user);
+    const responseData = schemaValidate(
+      LoggedUserRdo,
+      {email: user.email, token: token}
+    );
+    this.ok(res, responseData);
   }
 
-  public async isUserAuthenticated(): Promise<void> {
-    throw new HTTPException(StatusCodes.NOT_IMPLEMENTED, 'Not implemented');
+  public async isUserAuthenticated({tokenPayload}: Request, res: Response): Promise<void> {
+    const user = await this.userService.findByEmail(tokenPayload.email);
+    if (!user) {
+      throw new HTTPException(
+        StatusCodes.UNAUTHORIZED,
+        'Unauthorized'
+      );
+    }
+    this.ok(res, schemaValidate(LoggedUserRdo, user));
   }
 
   public async logout(): Promise<void> {

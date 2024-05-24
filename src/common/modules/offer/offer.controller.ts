@@ -10,9 +10,11 @@ import {
   BaseController,
   HTTPException,
   HttpMethod,
+  PrivateRouteMiddleware,
   RequestBody,
   RequestParams,
-  RequestQuery
+  RequestQuery,
+  ValidateDTOMiddleware
 } from '../../libs/rest/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {CommentRdo} from '../comment/rdo/comment.rdo.js';
@@ -32,9 +34,19 @@ export class OfferController extends BaseController {
     super(logger);
 
     this.addRoute({method: HttpMethod.GET, path: '/offers', handler: this.getOffers});
-    this.addRoute({method: HttpMethod.POST, path: '/offers', handler: this.createOffer});
+    this.addRoute({
+      method: HttpMethod.POST,
+      path: '/offers',
+      handler: this.createOffer,
+      middlewares: [new PrivateRouteMiddleware(), new ValidateDTOMiddleware(CreateOfferDto)]
+    });
     this.addRoute({method: HttpMethod.GET, path: '/offers/:id', handler: this.getOfferById});
-    this.addRoute({method: HttpMethod.PATCH, path: '/offers/:id', handler: this.updateOfferByID});
+    this.addRoute({
+      method: HttpMethod.PATCH,
+      path: '/offers/:id',
+      handler: this.updateOfferByID,
+      middlewares: [new PrivateRouteMiddleware(), new ValidateDTOMiddleware(CreateOfferDto)]
+    });
     this.addRoute({method: HttpMethod.DELETE, path: '/offers/:id', handler: this.deleteOfferById});
     this.addRoute({method: HttpMethod.GET, path: '/premium', handler: this.getPremiumOffers});
     this.addRoute({method: HttpMethod.GET, path: '/favourites', handler: this.getFavouritesOffers});
@@ -56,16 +68,24 @@ export class OfferController extends BaseController {
   }
 
   public async getOffers(
-    {query}: Request<unknown, unknown, unknown, RequestQuery>,
+    {query, tokenPayload}: Request<unknown, unknown, unknown, RequestQuery>,
     res: Response
   ): Promise<void> {
-    const offer = await this.offerService.find(query.limit);
-    const responseData = schemaValidate(OfferListRdo, offer);
+    const offers = await this.offerService.find(query.limit);
+    if (!tokenPayload) {
+      offers.map((offer) => {
+        offer.isFavourite = false;
+      });
+    }
+    const responseData = schemaValidate(OfferListRdo, offers);
     this.ok(res, responseData);
   }
 
-  public async createOffer({body}: CreateUpdateOfferRequest, res: Response): Promise<void> {
-    const result = await this.offerService.create(body);
+  public async createOffer({
+    body,
+    tokenPayload
+  }: CreateUpdateOfferRequest, res: Response): Promise<void> {
+    const result = await this.offerService.create({...body, host: tokenPayload.id});
     const offer = await this.offerService.findById(result.id);
     const responseData = schemaValidate(OfferRDO, offer);
     this.created(res, responseData);
@@ -83,11 +103,12 @@ export class OfferController extends BaseController {
 
   public async updateOfferByID({
     body,
-    params
+    params,
+    tokenPayload,
   }: CreateUpdateOfferRequest, res: Response): Promise<void> {
     const offerId = String(params.id);
     const offer = await this.offerService.findById(offerId);
-    if (!offer) {
+    if (!offer || offer.host.id !== tokenPayload.id) {
       throw new HTTPException(StatusCodes.BAD_REQUEST, 'Bad Request');
     }
     const updated = await this.offerService.updateById(offerId, body);
@@ -95,10 +116,10 @@ export class OfferController extends BaseController {
     this.ok(res, offerRDO);
   }
 
-  public async deleteOfferById({params}: Request, res: Response): Promise<void> {
+  public async deleteOfferById({params, tokenPayload}: Request, res: Response): Promise<void> {
     const offerId = String(params.id);
     const offer = await this.offerService.findById(offerId);
-    if (!offer) {
+    if (!offer || offer.host.id !== tokenPayload.id) {
       throw new HTTPException(StatusCodes.BAD_REQUEST, 'Bad Request');
     }
     await this.offerService.deleteById(offerId);

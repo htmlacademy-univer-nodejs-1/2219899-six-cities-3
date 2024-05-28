@@ -12,8 +12,5 @@ export const CreateUserMessages = {
   },
   type: {
     invalid: 'type must be regular or pro',
-  },
-  avatarUrl: {
-    invalidFormat: 'avatarUrl must be string',
   }
 } as const;

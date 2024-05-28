@@ -1,5 +1,5 @@
 import {UserType} from '../../../types/index.js';
-import {IsEmail, IsEnum, IsOptional, IsString, Length} from 'class-validator';
+import {IsEmail, IsEnum, IsString, Length} from 'class-validator';
 import {CreateUserMessages} from './create-user.messages.js';
 
 export class CreateUserDTO {
@@ -16,8 +16,4 @@ export class CreateUserDTO {
 
   @IsEnum(UserType, {message: CreateUserMessages.type.invalid})
   public type!: UserType;
-
-  @IsOptional()
-  @IsString({message: CreateUserMessages.avatarUrl.invalidFormat})
-  public avatarUrl!: string | undefined;
 }

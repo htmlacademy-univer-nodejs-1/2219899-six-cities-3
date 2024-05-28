@@ -5,7 +5,7 @@ import {Component} from '../../types/index.js';
 import {UserService} from './user-service.interface.js';
 import {StatusCodes} from 'http-status-codes';
 import {schemaValidate} from '../../utils/index.js';
-import {LoggedUserRdo, UserRDO} from './rdo/index.js';
+import {LoggedUserRdo, UploadUserAvatarRdo, UserRDO} from './rdo/index.js';
 import {
   BaseController,
   HTTPException,
@@ -103,7 +103,10 @@ export class UserController extends BaseController {
     throw new HTTPException(StatusCodes.NOT_IMPLEMENTED, 'Not implemented');
   }
 
-  public async uploadAvatar(_req: Request, _res: Response): Promise<void> {
-    this.created(_res, {filepath: _req.file?.path});
+  public async uploadAvatar({params, file}: Request, _res: Response): Promise<void> {
+    const {userId} = params;
+    const uploadFile = {avatarUrl: file?.filename};
+    await this.userService.updateByID(userId, uploadFile);
+    this.created(_res, schemaValidate(UploadUserAvatarRdo, {filepath: uploadFile.avatarUrl}));
   }
 }

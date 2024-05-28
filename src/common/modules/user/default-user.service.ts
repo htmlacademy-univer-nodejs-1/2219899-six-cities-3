@@ -3,8 +3,9 @@ import {Component} from '../../types/index.js';
 import {UserService} from './user-service.interface.js';
 import {UserEntity} from './user.entity.js';
 import {DocumentType, types} from '@typegoose/typegoose';
-import {CreateUserDTO} from './dto/index.js';
+import {CreateUserDTO, UpdateUserDTO} from './dto/index.js';
 import {Logger} from '../../libs/logger/index.js';
+import {DEFAULT_AVATAR_FILE_NAME} from './user.constant.js';
 
 
 @injectable()
@@ -16,7 +17,7 @@ export class DefaultUserService implements UserService {
   }
 
   public async create(dto: CreateUserDTO, salt: string): Promise<DocumentType<UserEntity>> {
-    const user = new UserEntity(dto);
+    const user = new UserEntity({...dto, avatarUrl: DEFAULT_AVATAR_FILE_NAME});
     user.setPassword(dto.password, salt);
 
     const result = await this.userModel.create(user);
@@ -41,5 +42,11 @@ export class DefaultUserService implements UserService {
     }
 
     return await this.create(dto, salt);
+  }
+
+  public async updateByID(userId: string, dto: UpdateUserDTO): Promise<DocumentType<UserEntity> | null> {
+    return await this.userModel
+      .findByIdAndUpdate(userId, dto, { new: true })
+      .exec();
   }
 }

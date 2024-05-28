@@ -4,7 +4,7 @@ import {OfferService} from './offer-service.interface.js';
 import {Request, Response} from 'express';
 import {schemaValidate} from '../../utils/index.js';
 import {OfferListRdo, OfferRDO} from './rdo/index.js';
-import {CreateOfferDto} from './dto/index.js';
+import {CreateOfferDto, UpdateOfferDTO} from './dto/index.js';
 import {StatusCodes} from 'http-status-codes';
 import {
   BaseController,
@@ -22,7 +22,8 @@ import {CommentService} from '../comment/index.js';
 import {ParamsDictionary} from 'express-serve-static-core';
 
 export type ParamOfferId = { offerId: string } | ParamsDictionary;
-type CreateUpdateOfferRequest = Request<RequestParams, RequestBody, CreateOfferDto>;
+type CreateOfferRequest = Request<RequestParams, RequestBody, CreateOfferDto>;
+type UpdateOfferRequest = Request<RequestParams, RequestBody, UpdateOfferDTO>;
 
 @injectable()
 export class OfferController extends BaseController {
@@ -38,7 +39,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.POST,
       path: '/offers',
       handler: this.createOffer,
-      middlewares: [new PrivateRouteMiddleware(), new ValidateDTOMiddleware(CreateOfferDto)]
+      middlewares: [new PrivateRouteMiddleware()]
     });
     this.addRoute({method: HttpMethod.GET, path: '/offers/:id', handler: this.getOfferById});
     this.addRoute({
@@ -84,7 +85,7 @@ export class OfferController extends BaseController {
   public async createOffer({
     body,
     tokenPayload
-  }: CreateUpdateOfferRequest, res: Response): Promise<void> {
+  }: CreateOfferRequest, res: Response): Promise<void> {
     const result = await this.offerService.create({...body, host: tokenPayload.id});
     const offer = await this.offerService.findById(result.id);
     const responseData = schemaValidate(OfferRDO, offer);
@@ -105,7 +106,7 @@ export class OfferController extends BaseController {
     body,
     params,
     tokenPayload,
-  }: CreateUpdateOfferRequest, res: Response): Promise<void> {
+  }: UpdateOfferRequest, res: Response): Promise<void> {
     const offerId = String(params.id);
     const offer = await this.offerService.findById(offerId);
     if (!offer || offer.host.id !== tokenPayload.id) {
@@ -135,13 +136,13 @@ export class OfferController extends BaseController {
       throw new HTTPException(StatusCodes.BAD_REQUEST, '"city" is required at params');
     }
     const offers = await this.offerService.findPremiumOffers(city);
-    const responseData = schemaValidate(Array<OfferListRdo>, offers);
+    const responseData = schemaValidate(OfferListRdo, offers);
     this.ok(res, responseData);
   }
 
   public async getFavouritesOffers(_req: Request, res: Response): Promise<void> {
     const favouriteOffers = await this.offerService.findFavouriteOffer();
-    const responseData = schemaValidate(Array<OfferListRdo>, favouriteOffers);
+    const responseData = schemaValidate(OfferListRdo, favouriteOffers);
     this.ok(res, responseData);
   }
 

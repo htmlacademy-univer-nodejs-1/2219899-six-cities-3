@@ -2,14 +2,14 @@ import {Expose} from 'class-transformer';
 
 export class LoggedUserRdo {
   @Expose()
-  public token!: string;
+  public token: string;
 
   @Expose()
-  public email!: string;
+  public email: string;
 
   @Expose()
-  public avatarUrl!: string;
+  public avatarUrl: string;
 
   @Expose()
-  public name!: string;
+  public name: string;
 }

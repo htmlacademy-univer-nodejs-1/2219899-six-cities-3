@@ -1,5 +1,5 @@
 import {Expose} from 'class-transformer';
-import {City, AccommodationType} from '../../../types/index.js';
+import {City, AccommodationType, Location} from '../../../types/index.js';
 
 export class OfferListRdo {
   @Expose()
@@ -18,7 +18,7 @@ export class OfferListRdo {
   public isPremium!: boolean;
 
   @Expose()
-  public isFavourites!: boolean;
+  public isFavourite!: boolean;
 
   @Expose()
   public createdAt!: string;
@@ -33,5 +33,8 @@ export class OfferListRdo {
   public rating!: number;
 
   @Expose()
-  public commentsCount!: number;
+  public commentsCount: number;
+
+  @Expose()
+  public location: Location;
 }

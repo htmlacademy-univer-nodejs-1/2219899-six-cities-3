@@ -38,7 +38,7 @@ export class DefaultOfferService implements OfferService {
   async updateById(offerId: string, updatedSchema: UpdateOfferDTO): Promise<DocumentType<OfferEntity> | null> {
     return await this.offerModel
       .findByIdAndUpdate(offerId, updatedSchema, {new: true})
-      .populate('userId')
+      .populate('host')
       .exec();
   }
 
@@ -56,30 +56,30 @@ export class DefaultOfferService implements OfferService {
 
   async findPremiumOffers(city: string): Promise<DocumentType<OfferEntity>[]> {
     return await this.offerModel
-      .find({city: city, isPremium: true})
-      .sort({publishedAt: 'desc'})
-      .populate('userId')
+      .find({"city.name": city, isPremium: true})
+      .sort({createdAt: 'desc'})
+      .populate('host')
       .exec();
   }
 
   async findFavouriteOffer(): Promise<DocumentType<OfferEntity>[]> {
     return await this.offerModel
       .find({isFavourite: true})
-      .sort({publishedAt: 'desc'})
-      .populate('userId')
+      .sort({createdAt: 'desc'})
+      .populate('host')
       .exec();
   }
 
   async deleteFavourite(offerId: string): Promise<DocumentType<OfferEntity, types.BeAnObject> | null> {
     return await this.offerModel
-      .findByIdAndUpdate(offerId, {isFavourite: true}, {new: true})
-      .populate('userId')
+      .findByIdAndUpdate(offerId, {isFavourite: false}, {new: true})
+      .populate('host')
       .exec();
   }
 
   async addFavourite(offerId: string): Promise<DocumentType<OfferEntity, types.BeAnObject> | null> {
     return await this.offerModel
-      .findByIdAndUpdate(offerId, {isFavourite: false}, {new: true})
+      .findByIdAndUpdate(offerId, {isFavourite: true}, {new: true})
       .exec();
   }
 
@@ -109,7 +109,7 @@ export class DefaultOfferService implements OfferService {
 
     return this.offerModel
       .findByIdAndUpdate(offerId, {rating: rating[0]}, {new: true})
-      .populate('authorOfferId')
+      .populate('host')
       .exec();
   }
 }

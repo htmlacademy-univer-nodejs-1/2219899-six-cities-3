@@ -1,4 +1,6 @@
+import {IsString} from 'class-validator';
+
 export class UpdateUserDTO {
-  public avatarUrl?: string;
-  public name?: string;
+  @IsString({})
+  public avatarUrl: string;
 }

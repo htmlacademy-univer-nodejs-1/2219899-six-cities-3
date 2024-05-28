@@ -594,7 +594,7 @@ components:
           maxLength: 1024
         date:
           type: string
-          format: 'date-time'
+          format: 'postDate-time'
         rating:
           type: number
           minimum: 1

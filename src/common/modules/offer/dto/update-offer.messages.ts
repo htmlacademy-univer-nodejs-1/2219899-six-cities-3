@@ -1,13 +1,11 @@
 export const UpdateOfferValidationMessage = {
   title: {
     required: 'title is required',
-    minLength: 'minimum title length must be 10',
-    maxLength: 'maximum title length must be 100',
+    length: 'Title length must be between 10 and 100',
   },
   description: {
     required: 'description is required',
-    minLength: 'minimum description length must be 20',
-    maxLength: 'maximum description length must be 1024',
+    length: 'Description length must be between 20 and 1024',
   },
   city: {
     invalid: 'city must be Paris, Cologne, Brussels, Amsterdam, Hamburg or Dusseldorf ',
@@ -57,8 +55,6 @@ export const UpdateOfferValidationMessage = {
     invalidId: 'host field must be a valid id',
   },
   location: {
-    invalidFormat: 'field categories must be an array',
-    invalidFormatInt: 'location items must be an integer',
-    length: 'location must contain 2 items',
+    invalidFormat: 'Must be a location objects',
   }
 } as const;

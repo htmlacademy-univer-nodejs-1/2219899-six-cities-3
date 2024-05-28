@@ -89,6 +89,12 @@ export class UserController extends BaseController {
   }
 
   public async isUserAuthenticated({tokenPayload}: Request, res: Response): Promise<void> {
+    if (!tokenPayload) {
+      throw new HTTPException(
+        StatusCodes.UNAUTHORIZED,
+        'Unauthorized'
+      );
+    }
     const user = await this.userService.findByEmail(tokenPayload.email);
     if (!user) {
       throw new HTTPException(
@@ -99,13 +105,16 @@ export class UserController extends BaseController {
     this.ok(res, schemaValidate(LoggedUserRdo, user));
   }
 
-  public async logout(): Promise<void> {
-    throw new HTTPException(StatusCodes.NOT_IMPLEMENTED, 'Not implemented');
+  public async logout(_req: Request, _res: Response): Promise<void> {
+    this.ok(_res, 'Logged out');
   }
 
   public async uploadAvatar({params, file}: Request, _res: Response): Promise<void> {
+    if (!file) {
+      throw new HTTPException(StatusCodes.BAD_REQUEST, 'No avatar to set');
+    }
     const {userId} = params;
-    const uploadFile = {avatarUrl: file?.filename};
+    const uploadFile = {avatarUrl: file.filename};
     await this.userService.updateByID(userId, uploadFile);
     this.created(_res, schemaValidate(UploadUserAvatarRdo, {filepath: uploadFile.avatarUrl}));
   }

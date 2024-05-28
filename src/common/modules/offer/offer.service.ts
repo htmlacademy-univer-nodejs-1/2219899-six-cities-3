@@ -56,7 +56,7 @@ export class DefaultOfferService implements OfferService {
 
   async findPremiumOffers(city: string): Promise<DocumentType<OfferEntity>[]> {
     return await this.offerModel
-      .find({"city.name": city, isPremium: true})
+      .find({'city.name': city, isPremium: true})
       .sort({createdAt: 'desc'})
       .populate('host')
       .exec();

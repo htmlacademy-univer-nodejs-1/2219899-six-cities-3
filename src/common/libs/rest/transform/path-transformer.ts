@@ -54,10 +54,7 @@ export class PathTransformer {
             if (typeof value === 'string' && !isExternalLink(value)) {
               current[key] = this.transform(value);
             } else if (Array.isArray(value)) {
-              current[key] = value.map((currentImage) => {
-                typeof currentImage === 'string' && !isExternalLink(currentImage)
-                  ? this.transform(currentImage) : currentImage;
-              });
+              current[key] = value.map((currentImage) => typeof currentImage === 'string' && !isExternalLink(currentImage) ? this.transform(currentImage) : currentImage);
             }
           }
         }

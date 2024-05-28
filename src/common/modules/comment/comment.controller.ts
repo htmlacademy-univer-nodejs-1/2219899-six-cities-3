@@ -45,7 +45,7 @@ export class CommentController extends BaseController {
     {body, params, tokenPayload}: CreateCommentRequest,
     res: Response
   ): Promise<void> {
-  const offer = await this.offerService.findById(params.offerId);
+    const offer = await this.offerService.findById(params.offerId);
     if (!offer) {
       throw new HTTPException(
         StatusCodes.NOT_FOUND,
@@ -54,7 +54,11 @@ export class CommentController extends BaseController {
       );
     }
 
-    const comment = await this.commentService.create({...body, userId: tokenPayload.id, offerId: offer.id});
+    const comment = await this.commentService.create({
+      ...body,
+      userId: tokenPayload.id,
+      offerId: offer.id
+    });
     await this.offerService.incrementCommentCount(offer.id);
     await this.offerService.updateOfferRating(offer.id);
     this.created(res, schemaValidate(CommentRdo, comment));

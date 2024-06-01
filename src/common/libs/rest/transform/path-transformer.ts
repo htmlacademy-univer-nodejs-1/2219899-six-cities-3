@@ -10,6 +10,10 @@ function isObject(value: unknown): value is Record<string, object> {
   return typeof value === 'object' && value !== null;
 }
 
+function isExternalLink(link: string): boolean {
+  return link.startsWith('http://') || link.startsWith('https://');
+}
+
 @injectable()
 export class PathTransformer {
   constructor(
@@ -27,6 +31,11 @@ export class PathTransformer {
     return STATIC_RESOURCE_FIELDS.includes(property);
   }
 
+  private transform(value: string) {
+    const rootPath = this.hasDefaultImage(value) ? STATIC_FILES_ROUTE : STATIC_UPLOAD_ROUTE;
+    return `${getFullServerPath(this.config.get('HOST'), this.config.get('PORT'))}${rootPath}/${value}`;
+  }
+
   public execute(data: Record<string, unknown>): Record<string, unknown> {
     const stack = [data];
     while (stack.length > 0) {
@@ -41,19 +50,16 @@ export class PathTransformer {
             continue;
           }
 
-          if (this.isStaticProperty(key) && typeof value === 'string') {
-            const staticPath = STATIC_FILES_ROUTE;
-            const uploadPath = STATIC_UPLOAD_ROUTE;
-            const serverHost = this.config.get('HOST');
-            const serverPort = this.config.get('PORT');
-
-            const rootPath = this.hasDefaultImage(value) ? staticPath : uploadPath;
-            current[key] = `${getFullServerPath(serverHost, serverPort)}${rootPath}/${value}`;
+          if (this.isStaticProperty(key)) {
+            if (typeof value === 'string' && !isExternalLink(value)) {
+              current[key] = this.transform(value);
+            } else if (Array.isArray(value)) {
+              current[key] = value.map((currentImage) => typeof currentImage === 'string' && !isExternalLink(currentImage) ? this.transform(currentImage) : currentImage);
+            }
           }
         }
       }
     }
-
     return data;
   }
 }

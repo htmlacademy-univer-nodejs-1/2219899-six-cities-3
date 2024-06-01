@@ -4,7 +4,6 @@ import {
   HttpMethod,
   PrivateRouteMiddleware,
   RequestBody,
-  ValidateDTOMiddleware,
   ValidateObjectIDMiddleware
 } from '../../libs/rest/index.js';
 import {inject, injectable} from 'inversify';
@@ -37,7 +36,6 @@ export class CommentController extends BaseController {
       handler: this.create,
       middlewares: [
         new ValidateObjectIDMiddleware('offerId'),
-        new ValidateDTOMiddleware(CreateCommentDTO),
         new PrivateRouteMiddleware()
       ]
     });
@@ -47,8 +45,8 @@ export class CommentController extends BaseController {
     {body, params, tokenPayload}: CreateCommentRequest,
     res: Response
   ): Promise<void> {
-
-    if (!await this.offerService.isExists(params.offerId)) {
+    const offer = await this.offerService.findById(params.offerId);
+    if (!offer) {
       throw new HTTPException(
         StatusCodes.NOT_FOUND,
         `Offer with id ${params.offerId} not found.`,
@@ -56,17 +54,13 @@ export class CommentController extends BaseController {
       );
     }
 
-    if (params.offerId !== body.offerId) {
-      throw new HTTPException(
-        StatusCodes.BAD_REQUEST,
-        'Offer Ids not equals.',
-        'CommentController'
-      );
-    }
-
-    const comment = await this.commentService.create({...body, userId: tokenPayload.id});
-    await this.offerService.incrementCommentCount(params.offerId);
-    await this.offerService.updateOfferRating(params.offerId);
+    const comment = await this.commentService.create({
+      ...body,
+      userId: tokenPayload.id,
+      offerId: offer.id
+    });
+    await this.offerService.incrementCommentCount(offer.id);
+    await this.offerService.updateOfferRating(offer.id);
     this.created(res, schemaValidate(CommentRdo, comment));
   }
 }

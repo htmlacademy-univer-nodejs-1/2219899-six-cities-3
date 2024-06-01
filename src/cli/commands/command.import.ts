@@ -1,7 +1,12 @@
 import {Command} from './command.interface.js';
 import chalk from 'chalk';
 import {RentOffer} from '../../common/types/index.js';
-import {DefaultUserService, UserEntity, UserModel, UserService} from '../../common/modules/user/index.js';
+import {
+  DefaultUserService,
+  UserEntity,
+  UserModel,
+  UserService
+} from '../../common/modules/user/index.js';
 import {DefaultOfferService, OfferModel, OfferService} from '../../common/modules/offer/index.js';
 import {parseOffer} from '../../common/utils/index.js';
 import {DatabaseClient, MongoClient} from '../../common/libs/database_client/index.js';
@@ -76,7 +81,7 @@ Example: ./src/main.cli.ts --import mocks/offer_rent.tsv`;
     await this.offerService.create({
       title: offer.title,
       description: offer.description,
-      city: offer.city,
+      city: {name: offer.city, location: {longitude: offer.location.longitude, latitude: offer.location.latitude}},
       previewImage: offer.previewImage,
       images: offer.images,
       isPremium: offer.isPremium,
@@ -85,7 +90,7 @@ Example: ./src/main.cli.ts --import mocks/offer_rent.tsv`;
       maxAdults: offer.maxAdults,
       price: offer.price,
       goods: offer.goods,
-      location: [offer.location.latitude, offer.location.longitude],
+      location: {longitude: offer.location.longitude, latitude: offer.location.latitude},
       host: user.id
     });
   }

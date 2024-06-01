@@ -1,3 +1,5 @@
+import {Location} from './location.type.js';
+
 export enum City {
   Paris = 'Paris',
   Cologne = 'Cologne',
@@ -5,4 +7,10 @@ export enum City {
   Amsterdam = 'Amsterdam',
   Hamburg = 'Hamburg',
   Dusseldorf = 'Dusseldorf'
+}
+
+
+export type RequestCity = {
+  name: City;
+  location: Location;
 }

@@ -11,7 +11,6 @@ export class UploadFileMiddleware implements Middleware {
   ) {
   }
 
-
   execute(req: Request, res: Response, next: NextFunction): void {
     const storage = diskStorage({
       destination: this.uploadDirectory,
